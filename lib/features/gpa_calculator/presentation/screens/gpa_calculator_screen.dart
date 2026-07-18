@@ -252,7 +252,11 @@ class _GpaCalculatorScreenState extends State<GpaCalculatorScreen> {
             icon: Icons.calculate,
             isPill: true,
             isLoading: _isCalculating,
-            onPressed: _canCalculate ? _calculate : null,
+            onPressed: (){
+              Navigator.push(context, 
+              MaterialPageRoute(builder: (_)=>SemesterResultScreen(gpa: _semesterGpa(), creditHours: _semesterGpa(), percentage: _semesterGpa(), totalObtained: _semesterGpa(), totalPossible: _semesterGpa(),), )
+              );
+            }
           ),
         ],
       ),

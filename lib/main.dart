@@ -6,12 +6,9 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => GpaViewModel()),
-        ],
-        child: const MyApp(),
-      )   );
+
+      const MyApp(),
+         );
 }
 
 class MyApp extends StatelessWidget {

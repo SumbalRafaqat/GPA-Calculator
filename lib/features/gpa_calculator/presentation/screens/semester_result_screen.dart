@@ -5,9 +5,6 @@ import 'package:gpa_calculator/core/theme/app_colors.dart';
 import 'package:gpa_calculator/core/theme/app_text_styles.dart';
 
 
-/// Exact match of the "Semester Result" screen: solid-blue GPA header card,
-/// Credit Hours + Percentage stat tiles, Academic Performance card
-/// (Average Marks | Total), and PDF/Image/Share/Download action row.
 class SemesterResultScreen extends StatelessWidget {
   final double gpa;
   final double creditHours;

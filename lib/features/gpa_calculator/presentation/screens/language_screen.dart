@@ -1,222 +1,147 @@
-// lib/features/gpa_calculator/presentation/screens/language_screen.dart
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/constants/app_dimensions.dart';
+import 'package:gpa_calculator/core/constants/app_dimensions.dart';
+import 'package:gpa_calculator/core/theme/app_colors.dart';
+import 'package:gpa_calculator/core/theme/app_text_styles.dart';
+import 'package:gpa_calculator/features/dashboard/dashboard_screen.dart';
 
+/// Pixel match: full-width pill rows, selected = solid primary blue with
+/// white text + filled radio, unselected = light-grey pill with outline
+/// radio, small ad banner pinned at the bottom.
 class LanguageScreen extends StatefulWidget {
-  const LanguageScreen({Key? key}) : super(key: key);
+  const LanguageScreen({super.key});
 
   @override
   State<LanguageScreen> createState() => _LanguageScreenState();
 }
 
 class _LanguageScreenState extends State<LanguageScreen> {
-  final List<Map<String, String>> _languages = [
-    {'name': 'English', 'code': 'en'},
-    {'name': 'العربية', 'code': 'ar'},
-    {'name': 'فارسی', 'code': 'fa'},
-    {'name': 'Deutsch', 'code': 'de'},
-    {'name': 'Espanol', 'code': 'es'},
-    {'name': 'Indonesi', 'code': 'id'},
-  ];
+  String _selected = 'English';
 
-  String _selectedLanguageCode = 'en';
+  static const _languages = ['English', 'العربية', 'فارسی', 'Deutsch', 'Espanol', 'Indonesi'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: AppColors.cardBg,
+        backgroundColor: Colors.white,
         elevation: 0,
-        title: Text(
-          'Languages',
-          style: AppTextStyles.titleMedium.copyWith(fontSize: 20),
-        ),
+        automaticallyImplyLeading: false,
+        title: Text('Languages', style: AppTextStyles.h1),
         actions: [
-          GestureDetector(
-            onTap: () {
-              // Confirm Language selection and navigate forward
-            },
-            child: Container(
-              margin: const EdgeInsets.only(right: 16, top: 12, bottom: 12),
-              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingMedium),
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
-              ),
-              alignment: Alignment.center,
-              child: const Icon(
-                Icons.check,
-                color: Colors.white,
-                size: 18,
+          Padding(
+            padding: const EdgeInsets.only(right: AppDimensions.spaceL),
+            child: Center(
+              child: Container(
+                width: 44,
+                height: 32,
+                decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(AppDimensions.radiusPill)),
+                child: InkWell(
+                    onTap: (){
+                      Navigator.push(context,MaterialPageRoute(
+                        builder: (_) =>
+
+                        const DashboardScreen(),
+                      ),);
+                    },
+                    child: const Icon(Icons.check, color: Colors.white, size: 18)),
               ),
             ),
           ),
         ],
       ),
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Informational Subtitle
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.paddingMedium,
-                vertical: AppDimensions.paddingMedium,
-              ),
-              child: Text(
-                'Select a language. Change it anytime in settings.',
-                style: AppTextStyles.bodyMedium,
-              ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spaceL),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Select a language. Change it anytime in settings.', style: AppTextStyles.caption),
             ),
-
-            // Language Cards
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: AppDimensions.paddingMedium),
-                itemCount: _languages.length,
-                itemBuilder: (context, index) {
-                  final lang = _languages[index];
-                  final isSelected = _selectedLanguageCode == lang['code'];
-
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedLanguageCode = lang['code']!;
-                      });
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 150),
-                      margin: const EdgeInsets.only(bottom: 12),
-                      padding: const EdgeInsets.all(AppDimensions.paddingMedium),
-                      decoration: BoxDecoration(
-                        color: isSelected ? AppColors.primary : AppColors.fieldBackground,
-                        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
-                        boxShadow: isSelected
-                            ? [
-                          BoxShadow(
-                            color: AppColors.primary.withOpacity(0.2),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          )
-                        ]
-                            : [],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            lang['name']!,
-                            style: AppTextStyles.titleMedium.copyWith(
-                              color: isSelected ? Colors.white : AppColors.textMain,
-                            ),
-                          ),
-                          // Custom Radio logic with exact colors
-                          Container(
-                            width: 20,
-                            height: 20,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: isSelected ? Colors.white : AppColors.textLight,
-                                width: 2,
-                              ),
-                              color: isSelected ? Colors.white : Colors.transparent,
-                            ),
-                            child: isSelected
-                                ? const Center(
-                              child: Icon(
-                                Icons.circle,
-                                size: 10,
-                                color: AppColors.primary,
-                              ),
-                            )
-                                : null,
-                          ),
-                        ],
-                      ),
+          ),
+          const SizedBox(height: AppDimensions.spaceM),
+          Expanded(
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spaceL),
+              itemCount: _languages.length,
+              separatorBuilder: (_, __) => const SizedBox(height: AppDimensions.spaceS),
+              itemBuilder: (context, i) {
+                final lang = _languages[i];
+                final selected = lang == _selected;
+                return InkWell(
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusPill),
+                  onTap: () => setState(() => _selected = lang),
+                  child: Container(
+                    height: 56,
+                    padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spaceL),
+                    decoration: BoxDecoration(
+                      color: selected ? AppColors.primary : AppColors.chipInactiveBg,
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusPill),
                     ),
-                  );
-                },
-              ),
-            ),
-
-            // Custom Ad Placeholder Space matching dimensions
-            Container(
-              margin: const EdgeInsets.all(AppDimensions.paddingMedium),
-              height: 60,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.fieldBackground,
-                borderRadius: BorderRadius.circular(AppDimensions.radiusSmall),
-                border: Border.all(color: AppColors.border),
-              ),
-              child: Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      bottomLeft: Radius.circular(8),
-                    ),
-                    child: Image.asset(
-                      'assets/images/ad_placeholder.png', // Local placeholder mapping
-                      width: 60,
-                      height: 60,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                      const Icon(Icons.image, color: AppColors.textLight),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'A Quick Brown Fox Jumps...',
-                          style: AppTextStyles.bodyMedium.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 2),
-                        const Text(
-                          'Learn More',
+                          lang,
                           style: TextStyle(
-                            color: AppColors.success,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: selected ? Colors.white : AppColors.textPrimary,
                           ),
+                        ),
+                        Icon(
+                          selected ? Icons.radio_button_checked : Icons.radio_button_off,
+                          color: selected ? Colors.white : AppColors.textSecondary,
                         ),
                       ],
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 12),
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: AppColors.success,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: const Text(
-                      'AD',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+          _adBanner(),
+        ],
+      ),
+    );
+  }
+
+  Widget _adBanner() {
+    return Container(
+      margin: const EdgeInsets.all(AppDimensions.spaceM),
+      padding: const EdgeInsets.all(AppDimensions.spaceS),
+      decoration: BoxDecoration(
+        color: const Color(0xFFEFF8F0),
+        borderRadius: BorderRadius.circular(AppDimensions.radiusButton),
+      ),
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Container(width: 64, height: 64, color: Colors.grey.shade300),
+          ),
+          const SizedBox(width: AppDimensions.spaceS),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(color: AppColors.success, borderRadius: BorderRadius.circular(4)),
+                  child: const Text('AD', style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.w700)),
+                ),
+                const SizedBox(height: 4),
+                 Text('Sponsored content preview text goes here…', style: AppTextStyles.captionSmall, maxLines: 2),
+                const SizedBox(height: 4),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(color: AppColors.success, borderRadius: BorderRadius.circular(AppDimensions.radiusPill)),
+                  child: const Text('Learn More', style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w700)),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

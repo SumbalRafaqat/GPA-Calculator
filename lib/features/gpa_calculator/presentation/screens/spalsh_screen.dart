@@ -1,44 +1,31 @@
-// lib/features/gpa_calculator/presentation/screens/splash_screen.dart
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/constants/app_dimensions.dart';
-import 'language_screen.dart';
+import 'package:gpa_calculator/core/theme/app_colors.dart';
+import 'package:gpa_calculator/features/gpa_calculator/presentation/screens/language_screen.dart';
 
+/// Pixel match: gradient blue-to-purple background, white rounded-square
+/// logo mark, title + tagline, 3-dot onboarding progress indicator
+/// (dot 2 of 3 active).
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
-  late AnimationController _progressController;
-
+class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _progressController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 60),
-    )..addListener(() {
-      setState(() {});
-    })..addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LanguageScreen()),
-        );
-      }
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) =>
+
+               const LanguageScreen(),
+        ),
+      );
     });
-
-    _progressController.forward();
-  }
-
-  @override
-  void dispose() {
-    _progressController.dispose();
-    super.dispose();
   }
 
   @override
@@ -47,105 +34,62 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        // Memory me saved gradient colors use kiye hain
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              AppColors.primaryGradientStart, // 0xFF1572E8
-              AppColors.primaryGradientEnd,   // 0xFF3399FF
-            ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
+            colors: [AppColors.gradientTop, AppColors.gradientBottom],
           ),
         ),
         child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Spacer(flex: 3),
-
-              // App Logo Container
+              const Spacer(flex: 4),
               Container(
-                width: 120,
-                height: 120,
+                width: 96,
+                height: 96,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(28),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.15),
-                      blurRadius: 25,
-                      offset: const Offset(0, 10),
-                    ),
-                  ],
+                  borderRadius: BorderRadius.circular(24),
                 ),
-                alignment: Alignment.center,
-                // ==========================================
-                // YAHAN APNI LOGO IMAGE SET KAREIN:
-                // ==========================================
-                child: Image.asset(
-                  'assets/images/image1.png', // Apni image lagane ke liye path
-                  width: 80,
-                  height: 80,
-                  fit: BoxFit.contain,
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Icon(
-                      Icons.school_rounded,
-                      size: 65,
-                      color: AppColors.primary,
-                    );
-                  },
-                ),
+                child: const Icon(Icons.school, color: AppColors.gradientTop, size: 48),
               ),
-              const SizedBox(height: AppDimensions.paddingLarge),
-
-              // Title "GPA Planner"
+              const SizedBox(height: 24),
               const Text(
                 'GPA Planner',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  letterSpacing: -0.5,
-                  fontFamily: 'Inter',
-                ),
+                style: TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.w800),
               ),
-              const SizedBox(height: AppDimensions.paddingSmall),
-
-              // Subtitle
-              Text(
+              const SizedBox(height: 6),
+              const Text(
                 'TRACK. CALCULATE. EXCEL.',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white.withOpacity(0.7),
-                  letterSpacing: 1.5,
-                  fontFamily: 'Inter',
-                ),
+                style: TextStyle(color: Colors.white70, fontSize: 12, letterSpacing: 1.4, fontWeight: FontWeight.w600),
               ),
-
-              const Spacer(flex: 2),
-
-              // Linear Progress Indicator
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 60.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(AppDimensions.radiusSmall),
-                  child: SizedBox(
-                    height: 5,
-                    child: LinearProgressIndicator(
-                      value: _progressController.value,
-                      backgroundColor: Colors.white.withOpacity(0.2),
-                      valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  ),
-                ),
+              const Spacer(flex: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _dot(active: false),
+                  const SizedBox(width: 6),
+                  _dot(active: true, wide: true),
+                  const SizedBox(width: 6),
+                  _dot(active: false),
+                ],
               ),
-
-              const Spacer(flex: 1),
+              const Spacer(flex: 3),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _dot({required bool active, bool wide = false}) {
+    return Container(
+      width: wide ? 40 : 24,
+      height: 4,
+      decoration: BoxDecoration(
+        color: active ? const Color(0xFF1E6FF2) : Colors.white70,
+        borderRadius: BorderRadius.circular(2),
       ),
     );
   }

@@ -3,16 +3,17 @@ import 'package:gpa_calculator/core/constants/app_dimensions.dart';
 import 'package:gpa_calculator/core/theme/app_colors.dart';
 import 'package:gpa_calculator/core/theme/app_text_styles.dart';
 
-/// Dropdown-style select field that matches the Figma "Department" /
-/// "Semester" picker exactly:
-///  - Collapsed: grey-bordered pill field, hint or value + chevron-down.
-///  - Expanded: options list unfolds ABOVE the field inside a light-grey
-///    rounded panel (radio circles, selected row in bold blue), the field
-///    itself gets a blue border with a small centered floating label
-///    ("— Department —") and the chevron flips to point up.
+
+/// Dropdown-style select field matching the Figma "Department" / "Semester"
+/// picker:
+///  - Persistent small caption above the field ("— Department —").
+///  - Collapsed: grey-bordered pill, value/hint + chevron-down.
+///  - Expanded: options list unfolds ABOVE the field in a light-grey rounded
+///    panel (radio circles, selected row bold blue), field border turns
+///    blue, chevron flips up.
 class CustomSelectField<T> extends StatefulWidget {
-  final String label; // shown as the small floating caption when expanded
-  final String hint;   // shown in the collapsed field when nothing selected
+  final String label;
+  final String hint;
   final T? value;
   final List<T> options;
   final String Function(T) labelBuilder;
@@ -39,16 +40,63 @@ class _CustomSelectFieldState<T> extends State<CustomSelectField<T>> {
 
   @override
   Widget build(BuildContext context) {
+    final hasValue = widget.value != null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        _captionRow(),
+        const SizedBox(height: 4),
         AnimatedCrossFade(
           duration: const Duration(milliseconds: 180),
           crossFadeState: _expanded ? CrossFadeState.showFirst : CrossFadeState.showSecond,
           firstChild: _optionsPanel(),
           secondChild: const SizedBox.shrink(),
         ),
-        _trigger(),
+        GestureDetector(
+          onTap: _toggle,
+          child: Container(
+            height: AppDimensions.fieldHeight,
+            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spaceM),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(AppDimensions.radiusPill),
+              border: Border.all(
+                color: _expanded ? AppColors.primary : AppColors.cardBorder,
+                width: _expanded ? AppDimensions.borderWidthSelected : AppDimensions.borderWidth,
+              ),
+            ),
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    hasValue ? widget.labelBuilder(widget.value as T) : widget.hint,
+                    style: hasValue
+                        ? AppTextStyles.bodyBold.copyWith(color: AppColors.primary)
+                        : AppTextStyles.fieldHint,
+                  ),
+                ),
+                Icon(
+                  _expanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                  color: AppColors.textSecondary,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _captionRow() {
+    return Row(
+      children: [
+        Expanded(child: Container(height: 1, color: AppColors.cardBorder)),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Text(widget.label, style: AppTextStyles.captionSmall.copyWith(color: AppColors.primary)),
+        ),
+        Expanded(child: Container(height: 1, color: AppColors.cardBorder)),
       ],
     );
   }
@@ -90,63 +138,6 @@ class _CustomSelectFieldState<T> extends State<CustomSelectField<T>> {
             ),
           );
         }).toList(),
-      ),
-    );
-  }
-
-  Widget _trigger() {
-    final hasValue = widget.value != null;
-    return GestureDetector(
-      onTap: _toggle,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Container(
-            height: AppDimensions.fieldHeight,
-            padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spaceM),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(AppDimensions.radiusPill),
-              border: Border.all(
-                color: _expanded ? AppColors.primary : AppColors.cardBorder,
-                width: _expanded ? AppDimensions.borderWidthSelected : AppDimensions.borderWidth,
-              ),
-            ),
-            alignment: Alignment.centerLeft,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    hasValue ? widget.labelBuilder(widget.value as T) : widget.hint,
-                    style: hasValue
-                        ? (_expanded
-                        ? AppTextStyles.bodyBold.copyWith(color: AppColors.primary)
-                        : AppTextStyles.fieldInput)
-                        : AppTextStyles.fieldHint,
-                  ),
-                ),
-                Icon(
-                  _expanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                  color: AppColors.textSecondary,
-                ),
-              ],
-            ),
-          ),
-          // small floating caption ("— Department —") centered on the top border, only when expanded
-          if (_expanded)
-            Positioned(
-              top: -8,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Container(
-                  color: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: Text(widget.label, style: AppTextStyles.captionSmall.copyWith(color: AppColors.primary)),
-                ),
-              ),
-            ),
-        ],
       ),
     );
   }

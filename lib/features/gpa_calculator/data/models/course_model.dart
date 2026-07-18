@@ -1,22 +1,23 @@
-// lib/features/gpa_calculator/data/models/course_model.dart
-class Course {
-  String id;
+/// Single course entry inside the GPA Calculator's course list.
+class CourseEntry {
   String name;
-  double? marksObtained;
-  double? totalMarks;
+  double? obtained;
+  double total;
   double creditHours;
 
-  Course({
-    required this.id,
+  CourseEntry({
     this.name = '',
-    this.marksObtained,
-    this.totalMarks = 100,
-    this.creditHours = 3.0,
+    this.obtained,
+    this.total = 100,
+    this.creditHours = 3,
   });
 
-  // Automatically calculate percentage for GPA conversion
-  double get percentage {
-    if (marksObtained == null || totalMarks == null || totalMarks == 0) return 0.0;
-    return (marksObtained! / totalMarks!) * 100;
+  /// Live percentage shown at the bottom of each course card.
+  /// Returns null until the student has typed an "Obtained" value.
+  double? get percentage {
+    if (obtained == null || total == 0) return null;
+    return (obtained! / total) * 100;
   }
+
+  bool get isValid => obtained != null && obtained! >= 0 && total > 0 && creditHours > 0;
 }

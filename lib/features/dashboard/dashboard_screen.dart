@@ -4,6 +4,7 @@ import 'package:gpa_calculator/core/common_widgets/feature_card.dart';
 import 'package:gpa_calculator/core/constants/app_dimensions.dart';
 import 'package:gpa_calculator/core/theme/app_colors.dart';
 import 'package:gpa_calculator/core/theme/app_text_styles.dart';
+import 'package:gpa_calculator/features/gpa_calculator/presentation/screens/gpa_calculator_screen.dart';
 
 
 /// Pixel match: header with title/subtitle + bell/avatar, solid-blue
@@ -70,7 +71,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
               accentColor: AppColors.gpaBlue,
               title: 'GPA Calculator',
               subtitle: 'Semester GPA',
-              onTap: () => Navigator.pushNamed(context, '/gpa-calculator'),
+              onTap:(){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_)=> const GpaCalculatorScreen()),
+                );
+              }
             ),
             const SizedBox(height: AppDimensions.spaceS),
             FeatureCard(
@@ -86,7 +91,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               accentColor: AppColors.plannerGreen,
               title: 'GPA Planner',
               subtitle: 'Plan Target GPA',
-              onTap: () {},
+              onTap: () {
+
+              },
             ),
             const SizedBox(height: AppDimensions.spaceS),
             FeatureCard(

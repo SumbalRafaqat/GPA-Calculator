@@ -4,14 +4,13 @@ import 'package:gpa_calculator/core/theme/app_colors.dart';
 import 'package:gpa_calculator/core/theme/app_text_styles.dart';
 
 
-/// Full-width pill/dark action button — matches the "GPA Calculate",
-/// "Save", "Continue" buttons across the app.
+
 class CustomButton extends StatelessWidget {
   final String label;
   final IconData? icon;
   final VoidCallback? onPressed;
   final Color backgroundColor;
-  final bool isPill; // true: fully rounded (GPA Calculate), false: radiusButton (Save/Reset)
+  final bool isPill;
   final bool isLoading;
 
   const CustomButton({
@@ -23,8 +22,6 @@ class CustomButton extends StatelessWidget {
     this.isPill = true,
     this.isLoading = false,
   });
-
-  /// Convenience constructor for the destructive "Reset" button style.
   const CustomButton.danger({
     super.key,
     required this.label,
@@ -34,7 +31,6 @@ class CustomButton extends StatelessWidget {
     this.isLoading = false,
   }) : backgroundColor = AppColors.danger;
 
-  /// Convenience constructor for primary blue actions ("Save", "Continue").
   const CustomButton.primary({
     super.key,
     required this.label,
@@ -87,8 +83,7 @@ class CustomButton extends StatelessWidget {
   }
 }
 
-/// Two-option segmented control — "Use Template / Manual Entry",
-/// "Use Marks / Use Grades", "Marks-Based / Grade-Based".
+
 class CustomSegmentedButton extends StatelessWidget {
   final String leftLabel;
   final String rightLabel;
@@ -136,7 +131,6 @@ class CustomSegmentedButton extends StatelessWidget {
   }
 }
 
-/// Small circular/pill chip — GPA scale (4.0/5.0/10.0), quick-select course count.
 class CustomChip extends StatelessWidget {
   final String label;
   final bool selected;
@@ -170,7 +164,6 @@ class CustomChip extends StatelessWidget {
   }
 }
 
-/// Outline button — "Share" action on result screens.
 class CustomOutlineButton extends StatelessWidget {
   final String label;
   final IconData icon;

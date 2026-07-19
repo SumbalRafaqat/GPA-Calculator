@@ -4,13 +4,7 @@ import 'package:gpa_calculator/core/theme/app_colors.dart';
 import 'package:gpa_calculator/core/theme/app_text_styles.dart';
 
 
-/// Dropdown-style select field matching the Figma "Department" / "Semester"
-/// picker:
-///  - Persistent small caption above the field ("— Department —").
-///  - Collapsed: grey-bordered pill, value/hint + chevron-down.
-///  - Expanded: options list unfolds ABOVE the field in a light-grey rounded
-///    panel (radio circles, selected row bold blue), field border turns
-///    blue, chevron flips up.
+
 class CustomSelectField<T> extends StatefulWidget {
   final String label;
   final String hint;

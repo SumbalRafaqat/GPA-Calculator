@@ -3,8 +3,7 @@ import 'package:gpa_calculator/core/constants/app_dimensions.dart';
 import 'package:gpa_calculator/core/theme/app_colors.dart';
 
 
-/// White, rounded, light-bordered section container used for every
-/// grouped block across the app (Configuration, Input Method, Semester N, etc.)
+
 class CustomCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry padding;

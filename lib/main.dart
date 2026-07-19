@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gpa_calculator/core/theme/app_theme.dart';
-import 'package:gpa_calculator/features/gpa_calculator/presentation/screens/spalsh_screen.dart';
+import 'package:gpa_calculator/features/gpa_calculator/presentation/homa_tab/spalsh_screen.dart';
 import 'package:gpa_calculator/features/gpa_calculator/view_model/gpa_view_model.dart';
 import 'package:provider/provider.dart';
 

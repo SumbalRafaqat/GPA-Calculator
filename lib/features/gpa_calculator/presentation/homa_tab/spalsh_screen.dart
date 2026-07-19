@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gpa_calculator/core/theme/app_colors.dart';
-import 'package:gpa_calculator/features/gpa_calculator/presentation/screens/language_screen.dart';
+import 'package:gpa_calculator/features/gpa_calculator/presentation/home_tab/language_screen.dart';
 
 /// Pixel match: gradient blue-to-purple background, white rounded-square
 /// logo mark, title + tagline, 3-dot onboarding progress indicator

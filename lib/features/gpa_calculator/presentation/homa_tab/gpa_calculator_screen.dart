@@ -6,19 +6,12 @@ import 'package:gpa_calculator/core/constants/app_dimensions.dart';
 import 'package:gpa_calculator/core/theme/app_colors.dart';
 import 'package:gpa_calculator/core/theme/app_text_styles.dart';
 import 'package:gpa_calculator/features/gpa_calculator/data/models/course_model.dart';
-import 'package:gpa_calculator/features/gpa_calculator/presentation/screens/semester_result_screen.dart';
+import 'package:gpa_calculator/features/gpa_calculator/presentation/homa_tab/semester_result_screen.dart';
 import 'package:gpa_calculator/features/gpa_calculator/presentation/widgets/course_card.dart';
 import 'package:gpa_calculator/features/gpa_calculator/presentation/widgets/course_header.dart';
 
 
-/// Full "GPA Calculator" screen — single scrolling page matching Figma
-/// exactly: Input Method, Scoring Method, (Number of Courses OR Template
-/// Selection), Courses header, dynamic course card list, GPA Calculate.
-///
-/// NOTE: no raster images are needed on this screen (icons only). If a
-/// future design adds an illustration here, drop the asset at
-/// assets/images/placeholder.png and swap it in — using that path as a
-/// temporary placeholder until the real asset is provided.
+
 class GpaCalculatorScreen extends StatefulWidget {
   const GpaCalculatorScreen({super.key});
 

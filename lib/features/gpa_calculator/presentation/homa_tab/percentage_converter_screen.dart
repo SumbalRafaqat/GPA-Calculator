@@ -3,7 +3,7 @@ import 'package:gpa_calculator/core/common_widgets/custom_button.dart';
 import 'package:gpa_calculator/core/constants/app_dimensions.dart';
 import 'package:gpa_calculator/core/theme/app_colors.dart';
 import 'package:gpa_calculator/core/theme/app_text_styles.dart';
-import 'package:gpa_calculator/features/gpa_calculator/presentation/screens/coversion_result_screen.dart';
+import 'package:gpa_calculator/features/gpa_calculator/presentation/home_tab/coversion_result_screen.dart';
 
 /// "Percentage to GPA" screen — bidirectional converter matching Figma
 /// exactly: top field + swap button + bottom field, labels flip between

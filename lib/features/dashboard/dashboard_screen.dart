@@ -4,8 +4,8 @@ import 'package:gpa_calculator/core/common_widgets/feature_card.dart';
 import 'package:gpa_calculator/core/constants/app_dimensions.dart';
 import 'package:gpa_calculator/core/theme/app_colors.dart';
 import 'package:gpa_calculator/core/theme/app_text_styles.dart';
+import 'package:gpa_calculator/features/gpa_calculator/presentation/screens/cgpa_calculator_screen.dart';
 import 'package:gpa_calculator/features/gpa_calculator/presentation/screens/gpa_calculator_screen.dart';
-
 
 /// Pixel match: header with title/subtitle + bell/avatar, solid-blue
 /// "Welcome back" banner with illustration, white "Detailed Results" row,
@@ -35,7 +35,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Dashboard', style: AppTextStyles.h1),
-                     Text('Track your academic performance', style: AppTextStyles.caption),
+                    Text('Track your academic performance', style: AppTextStyles.caption),
                   ],
                 ),
                 Row(
@@ -71,11 +71,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
               accentColor: AppColors.gpaBlue,
               title: 'GPA Calculator',
               subtitle: 'Semester GPA',
-              onTap:(){
+              onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (_)=> const GpaCalculatorScreen()),
+                  MaterialPageRoute(builder: (_) => const GpaCalculatorScreen()),
                 );
-              }
+              },
             ),
             const SizedBox(height: AppDimensions.spaceS),
             FeatureCard(
@@ -83,7 +83,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               accentColor: AppColors.cgpaPurple,
               title: 'CGPA Calculator',
               subtitle: 'Cumulative GPA',
-              onTap: () {},
+              // ⬇️ wired: navigates to the new CgpaCalculatorScreen
+              onTap: () {
+                Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const CgpaCalculatorScreen()),
+                );
+              },
             ),
             const SizedBox(height: AppDimensions.spaceS),
             FeatureCard(
@@ -91,9 +96,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               accentColor: AppColors.plannerGreen,
               title: 'GPA Planner',
               subtitle: 'Plan Target GPA',
-              onTap: () {
-
-              },
+              onTap: () {},
             ),
             const SizedBox(height: AppDimensions.spaceS),
             FeatureCard(
@@ -134,11 +137,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Container(
             width: 64,
             height: 76,
-            decoration: BoxDecoration(        color: AppColors.primary,
-     borderRadius: BorderRadius.circular(10)),
-            child: Image(
-                fit: BoxFit.contain,
-                image: AssetImage('assets/images/dashboard.png')),
+            decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(10)),
+            child: const Image(fit: BoxFit.contain, image: AssetImage('assets/images/dashboard.png')),
           ),
         ],
       ),
@@ -161,17 +161,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Container(
               width: 44, height: 44,
               decoration: BoxDecoration(color: AppColors.primaryLight, borderRadius: BorderRadius.circular(AppDimensions.radiusIcon)),
-              child:  Image(
-                  fit: BoxFit.contain,
-                  image: AssetImage('assets/images/Group.png')),
+              child: const Image(fit: BoxFit.contain, image: AssetImage('assets/images/Group.png')),
             ),
             const SizedBox(width: AppDimensions.spaceM),
-            Expanded(
+             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Detailed Results', style: AppTextStyles.h2),
-                   Text('View your GPA, credit hours, grade points, and performance insights.',
+                  Text('View your GPA, credit hours, grade points, and performance insights.',
                       style: AppTextStyles.caption, maxLines: 2, overflow: TextOverflow.ellipsis),
                 ],
               ),

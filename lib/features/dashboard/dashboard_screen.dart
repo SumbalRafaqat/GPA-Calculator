@@ -6,8 +6,11 @@ import 'package:gpa_calculator/core/theme/app_colors.dart';
 import 'package:gpa_calculator/core/theme/app_text_styles.dart';
 import 'package:gpa_calculator/features/gpa_calculator/presentation/screens/cgpa_calculator_screen.dart';
 import 'package:gpa_calculator/features/gpa_calculator/presentation/screens/gpa_calculator_screen.dart';
+import 'package:gpa_calculator/features/gpa_calculator/presentation/screens/gpa_planner_config_screen.dart';
 
-
+/// Pixel match: header with title/subtitle + bell/avatar, solid-blue
+/// "Welcome back" banner with illustration, white "Detailed Results" row,
+/// dashed "FEATURES" divider, 4 lavender feature cards, bottom nav.
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
@@ -94,7 +97,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               accentColor: AppColors.plannerGreen,
               title: 'GPA Planner',
               subtitle: 'Plan Target GPA',
-              onTap: () {},
+              // ⬇️ wired: navigates to the new GpaPlannerConfigScreen
+              onTap: () {
+                Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const GpaPlannerConfigScreen()),
+                );
+              },
             ),
             const SizedBox(height: AppDimensions.spaceS),
             FeatureCard(

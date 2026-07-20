@@ -4,9 +4,7 @@ import 'package:gpa_calculator/core/theme/app_colors.dart';
 import 'package:gpa_calculator/core/theme/app_text_styles.dart';
 import 'package:gpa_calculator/features/dashboard/dashboard_screen.dart';
 
-/// Pixel match: full-width pill rows, selected = solid primary blue with
-/// white text + filled radio, unselected = light-grey pill with outline
-/// radio, small ad banner pinned at the bottom.
+
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
 

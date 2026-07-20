@@ -9,9 +9,7 @@ import 'package:gpa_calculator/features/gpa_calculator/presentation/widgets/smes
 
 import 'cgpa_result_screen.dart';
 
-/// Full "CGPA Calculator" screen — single scrolling page matching Figma
-/// exactly: Configuration (Use Credit Hours toggle + GPA Scale chips),
-/// Number of Semesters quick-select, dynamic semester list, GPA Calculate.
+
 class CgpaCalculatorScreen extends StatefulWidget {
   const CgpaCalculatorScreen({super.key});
 

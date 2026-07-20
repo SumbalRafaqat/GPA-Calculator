@@ -20,7 +20,7 @@ class GpaCalculatorScreen extends StatefulWidget {
 }
 
 class _GpaCalculatorScreenState extends State<GpaCalculatorScreen> {
-  bool _useTemplate = false; // Figma default state for this screen = Manual Entry
+  bool _useTemplate = false;
   bool _useMarks = true;
 
   String? _department;

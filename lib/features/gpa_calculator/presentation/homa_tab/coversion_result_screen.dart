@@ -4,9 +4,7 @@ import 'package:gpa_calculator/core/constants/app_dimensions.dart';
 import 'package:gpa_calculator/core/theme/app_colors.dart';
 import 'package:gpa_calculator/core/theme/app_text_styles.dart';
 
-/// Confirmation screen shown after "GPA Calculate" on the Percentage↔GPA
-/// converter — blue "from → to" summary card, Scale / Max GPA reference
-/// card, "Got it!" to return to the Dashboard.
+
 class ConversionResultScreen extends StatelessWidget {
   final String fromLabel;
   final double fromValue;

@@ -7,10 +7,7 @@ import 'package:gpa_calculator/core/theme/app_text_styles.dart';
 import 'package:gpa_calculator/features/gpa_calculator/presentation/widgets/labeled_split_field.dart';
 import 'gpa_planner_result_screen.dart';
 
-/// Full "GPA Planner" screen — matches all 3 Figma states in one page:
-/// Configuration (Advanced planning toggle + GPA Scale), Current Status,
-/// Target Goals, and the conditional "Advanced Planning" card (Remaining
-/// Semesters) that appears only once the toggle is switched on.
+
 class GpaPlannerConfigScreen extends StatefulWidget {
   const GpaPlannerConfigScreen({super.key});
 

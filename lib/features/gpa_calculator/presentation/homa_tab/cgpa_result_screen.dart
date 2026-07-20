@@ -4,15 +4,7 @@ import 'package:gpa_calculator/core/constants/app_dimensions.dart';
 import 'package:gpa_calculator/core/theme/app_colors.dart';
 import 'package:gpa_calculator/core/theme/app_text_styles.dart';
 
-/// CGPA result screen — same visual structure as Semester Result
-/// (GPA header card, stat tiles, export row), relabelled for CGPA.
-///
-/// NOTE: the Figma frame for this screen still shows the Semester Result
-/// frame's original title ("Semester Result" / "Semester GPA") — that
-/// looks like a leftover copy-paste in the design file rather than an
-/// intentional label, so this screen uses the correct "CGPA Result" /
-/// "Cumulative GPA" copy instead. Swap the two Text widgets in the AppBar
-/// below if the literal Figma text is actually what's wanted.
+
 class CgpaResultScreen extends StatelessWidget {
   final double cgpa;
   final double totalCreditHours;

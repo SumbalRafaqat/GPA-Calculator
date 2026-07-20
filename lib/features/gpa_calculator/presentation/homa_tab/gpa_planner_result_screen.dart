@@ -3,9 +3,7 @@ import 'package:gpa_calculator/core/constants/app_dimensions.dart';
 import 'package:gpa_calculator/core/theme/app_colors.dart';
 import 'package:gpa_calculator/core/theme/app_text_styles.dart';
 
-/// "GPA Planner Result" screen — matches Figma exactly: Current/Target GPA
-/// stat tiles, Credit Hours breakdown card (Completed/Planned/Total), and
-/// an achievable (green) or not-achievable (red) status banner.
+
 class GpaPlannerResultScreen extends StatelessWidget {
   final double currentGpa;
   final double targetGpa;

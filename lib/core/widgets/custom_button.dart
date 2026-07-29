@@ -1,190 +1,73 @@
 import 'package:flutter/material.dart';
-import 'package:gpa_calculator/core/constants/app_dimensions.dart';
-import 'package:gpa_calculator/core/theme/app_colors.dart';
-import 'package:gpa_calculator/core/theme/app_text_styles.dart';
+import '../constants/app_colors.dart';
+import '../constants/app_text_styles.dart';
 
-
-
+/// Primary action button used across the app: "GPA Calculate",
+/// "Got it!", "Download", etc. Supports optional leading icon and
+/// a loading spinner state for async calculate/export actions.
 class CustomButton extends StatelessWidget {
   final String label;
-  final IconData? icon;
   final VoidCallback? onPressed;
-  final Color backgroundColor;
-  final bool isPill;
+  final IconData? icon;
   final bool isLoading;
+  final Color? backgroundColor;
+  final bool isOutlined;
 
   const CustomButton({
     super.key,
     required this.label,
-    this.icon,
     required this.onPressed,
-    this.backgroundColor = AppColors.darkActionButton,
-    this.isPill = true,
+    this.icon,
     this.isLoading = false,
+    this.backgroundColor,
+    this.isOutlined = false,
   });
-  const CustomButton.danger({
-    super.key,
-    required this.label,
-    this.icon = Icons.restore,
-    required this.onPressed,
-    this.isPill = false,
-    this.isLoading = false,
-  }) : backgroundColor = AppColors.danger;
-
-  const CustomButton.primary({
-    super.key,
-    required this.label,
-    this.icon,
-    required this.onPressed,
-    this.isPill = false,
-    this.isLoading = false,
-  }) : backgroundColor = AppColors.primary;
 
   @override
   Widget build(BuildContext context) {
-    final disabled = onPressed == null || isLoading;
-    return SizedBox(
-      width: double.infinity,
-      height: AppDimensions.buttonHeight,
-      child: ElevatedButton(
-        onPressed: disabled ? null : onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: disabled ? AppColors.chipInactiveBg : backgroundColor,
-          disabledBackgroundColor: backgroundColor.withOpacity(0.5),
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(isPill ? AppDimensions.radiusPill : AppDimensions.radiusButton),
-          ),
-        ),
-        child: isLoading
-            ? const SizedBox(
-          width: 22, height: 22,
-          child: CircularProgressIndicator(strokeWidth: 2.4, color: Colors.white),
-        )
-            : Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (icon != null) ...[
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(icon, color: Colors.white, size: AppDimensions.iconS),
-              ),
-              const SizedBox(width: AppDimensions.spaceS),
-            ],
-            Text(label, style: AppTextStyles.buttonLabel),
-          ],
-        ),
+    final child = isLoading
+        ? const SizedBox(
+      height: 20,
+      width: 20,
+      child: CircularProgressIndicator(
+        strokeWidth: 2,
+        color: Colors.white,
       ),
-    );
-  }
-}
-
-
-class CustomSegmentedButton extends StatelessWidget {
-  final String leftLabel;
-  final String rightLabel;
-  final bool isLeftSelected;
-  final ValueChanged<bool> onChanged;
-
-  const CustomSegmentedButton({
-    super.key,
-    required this.leftLabel,
-    required this.rightLabel,
-    required this.isLeftSelected,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
+    )
+        : Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Expanded(child: _segment(leftLabel, isLeftSelected, () => onChanged(true))),
-        const SizedBox(width: AppDimensions.spaceS),
-        Expanded(child: _segment(rightLabel, !isLeftSelected, () => onChanged(false))),
+        if (icon != null) ...[
+          Icon(icon, size: 18),
+          const SizedBox(width: 8),
+        ],
+        Text(label),
       ],
     );
-  }
 
-  Widget _segment(String label, bool selected, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppDimensions.radiusButton),
-      child: Container(
-        height: AppDimensions.buttonHeight,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: selected ? AppColors.chipSelectedBg : AppColors.chipInactiveBg,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusButton),
-        ),
-        child: Text(
-          label,
-          style: selected
-              ? AppTextStyles.buttonLabel
-              : AppTextStyles.buttonLabelDark.copyWith(color: AppColors.chipInactiveText),
-        ),
-      ),
-    );
-  }
-}
-
-class CustomChip extends StatelessWidget {
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const CustomChip({super.key, required this.label, required this.selected, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppDimensions.radiusChip),
-      child: Container(
-        width: AppDimensions.chipSize,
-        height: AppDimensions.chipSize,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: selected ? AppColors.primaryLight : Colors.white,
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: selected ? AppColors.primary : AppColors.cardBorder,
-            width: selected ? AppDimensions.borderWidthSelected : AppDimensions.borderWidth,
-          ),
-        ),
-        child: Text(
-          label,
-          style: AppTextStyles.bodyBold.copyWith(color: selected ? AppColors.primary : AppColors.textPrimary),
-        ),
-      ),
-    );
-  }
-}
-
-class CustomOutlineButton extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final VoidCallback onPressed;
-
-  const CustomOutlineButton({super.key, required this.label, required this.icon, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: AppDimensions.buttonHeight,
-      child: OutlinedButton.icon(
-        onPressed: onPressed,
+    if (isOutlined) {
+      return OutlinedButton(
+        onPressed: isLoading ? null : onPressed,
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.textPrimary,
-          side: const BorderSide(color: AppColors.cardBorder),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.radiusButton)),
+          foregroundColor: AppColors.primary,
+          side: const BorderSide(color: AppColors.primary),
+          minimumSize: const Size.fromHeight(52),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+          textStyle: AppTextStyles.buttonText.copyWith(color: AppColors.primary),
         ),
-        icon: Icon(icon, size: AppDimensions.iconM),
-        label: Text(label, style: AppTextStyles.buttonLabelDark),
+        child: child,
+      );
+    }
+
+    return ElevatedButton(
+      onPressed: isLoading ? null : onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: backgroundColor ?? AppColors.primary,
       ),
+      child: child,
     );
   }
 }

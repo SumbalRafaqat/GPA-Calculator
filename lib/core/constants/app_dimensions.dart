@@ -1,43 +1,40 @@
-/// Spacing, radius, and sizing constants measured off the final UI export
-/// (360dp reference width).
+/// Shared spacing, radius, and sizing constants.
+/// Keeps every screen's padding/margins/radii consistent without
+/// scattering magic numbers across widget files.
 class AppDimensions {
   AppDimensions._();
 
-  // ---- Spacing scale ----
-  static const double spaceXXS = 4;
-  static const double spaceXS = 8;
-  static const double spaceS = 12;
-  static const double spaceM = 16;
-  static const double spaceL = 20;   // standard screen horizontal padding
-  static const double spaceXL = 24;
-  static const double spaceXXL = 32;
+  // Spacing scale (based on Figma's 4/8/12/16/24 rhythm).
+  static const double spaceXs = 4.0;
+  static const double spaceSm = 8.0;
+  static const double spaceMd = 12.0;
+  static const double spaceLg = 16.0;
+  static const double spaceXl = 24.0;
+  static const double spaceXxl = 32.0;
 
-  // ---- Radius ----
-  static const double radiusCard = 20;        // section cards (Configuration, Input Method, etc.)
-  static const double radiusButton = 14;       // rectangular segmented buttons (Use Marks / Use Grades)
-  static const double radiusPill = 100;        // fully-rounded buttons (GPA Calculate, language rows)
-  static const double radiusField = 16;        // text fields / dropdowns
-  static const double radiusChip = 100;        // scale chips (4.0 / 5.0 / 10.0), quick-select numbers
-  static const double radiusIcon = 12;         // feature icon square background
+  // Screen-level padding (used as Scaffold body padding on every screen).
+  static const double screenPadding = 16.0;
 
-  // ---- Component heights ----
-  static const double buttonHeight = 56;       // segmented + primary action buttons
-  static const double fieldHeight = 52;
-  static const double chipSize = 44;           // circular quick-select chip (3/5/6/8/10)
-  static const double iconBoxSize = 44;        // feature card icon container
-  static const double bottomNavHeight = 64;
+  // Border radius.
+  static const double radiusSm = 8.0;
+  static const double radiusMd = 12.0;   // input fields
+  static const double radiusLg = 16.0;   // cards (course card, feature card)
+  static const double radiusXl = 20.0;   // dashboard hero blue card
+  static const double radiusPill = 999.0; // fully rounded buttons/badges
 
-  // ---- Borders ----
-  static const double borderWidth = 1;
-  static const double borderWidthSelected = 1.5;
+  // Component heights.
+  static const double buttonHeight = 52.0;
+  static const double inputHeight = 48.0;
+  static const double appBarHeight = 56.0;
 
-  // ---- Icon sizes ----
-  static const double iconS = 16;
-  static const double iconM = 20;
-  static const double iconL = 24;
-  static const double iconXL = 40;
+  // Icon sizes.
+  static const double iconSm = 18.0;
+  static const double iconMd = 24.0;
+  static const double iconLg = 32.0;
 
-  // ---- Elevation / shadow ----
-  static const double cardShadowBlur = 8;
-  static const double cardShadowOpacity = 0.04;
+  // Feature card icon container (Dashboard: rounded square behind icon).
+  static const double featureIconBoxSize = 44.0;
+
+  // Onboarding graduation-cap logo container size.
+  static const double onboardingLogoSize = 96.0;
 }

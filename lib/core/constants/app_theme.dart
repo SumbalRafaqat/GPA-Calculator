@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 import 'app_dimensions.dart';
 import 'app_text_styles.dart';
 
 /// Global ThemeData — rounded cards/buttons/inputs matching Figma design.
+/// Uses Inter (via google_fonts) as the app-wide font family.
 class AppTheme {
   AppTheme._();
 
   static ThemeData light() {
+    // Base Inter text theme — applies Inter to every default text style
+    // (body, title, label, etc.) so we don't have to set fontFamily on
+    // every individual TextStyle in app_text_styles.dart.
+    final baseTextTheme = GoogleFonts.interTextTheme();
+
     return ThemeData(
       useMaterial3: true,
+      fontFamily: GoogleFonts.inter().fontFamily,
+      textTheme: baseTextTheme,
       scaffoldBackgroundColor: AppColors.background,
       primaryColor: AppColors.primary,
       colorScheme: ColorScheme.fromSeed(
@@ -22,7 +31,9 @@ class AppTheme {
         elevation: 0,
         centerTitle: false,
         iconTheme: const IconThemeData(color: AppColors.textPrimary),
-        titleTextStyle: AppTextStyles.screenTitle,
+        titleTextStyle: GoogleFonts.inter(
+          textStyle: AppTextStyles.screenTitle,
+        ),
       ),
       cardTheme: CardThemeData(
         color: AppColors.surface,
@@ -40,7 +51,9 @@ class AppTheme {
           horizontal: AppDimensions.spaceLg,
           vertical: AppDimensions.spaceMd,
         ),
-        hintStyle: AppTextStyles.listItemSubtitle,
+        hintStyle: GoogleFonts.inter(
+          textStyle: AppTextStyles.listItemSubtitle,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
           borderSide: const BorderSide(color: AppColors.border),
@@ -63,7 +76,9 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppDimensions.radiusMd + 2),
           ),
-          textStyle: AppTextStyles.buttonText,
+          textStyle: GoogleFonts.inter(
+            textStyle: AppTextStyles.buttonText,
+          ),
         ),
       ),
     );

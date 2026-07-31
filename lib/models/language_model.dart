@@ -1,15 +1,14 @@
-/// Represents one row on the Language selection screen
-/// (English, العربية, فارسی, Deutsch, Espanol, Indonesi).
+/// Represents one row on the Language selection screen.
 class LanguageModel {
-  final String code; // e.g. 'en', 'ar', 'fa', 'de', 'es', 'id'
-  final String displayName; // native name shown in the list
+  final String code;
+  final String displayName;
 
   const LanguageModel({
     required this.code,
     required this.displayName,
   });
 
-  /// Fixed list matching the Figma "Languages" screen order exactly.
+  /// Full supported language list (16 total).
   static const List<LanguageModel> supportedLanguages = [
     LanguageModel(code: 'en', displayName: 'English'),
     LanguageModel(code: 'ar', displayName: 'العربية'),
@@ -17,6 +16,16 @@ class LanguageModel {
     LanguageModel(code: 'de', displayName: 'Deutsch'),
     LanguageModel(code: 'es', displayName: 'Espanol'),
     LanguageModel(code: 'id', displayName: 'Indonesi'),
+    LanguageModel(code: 'fr', displayName: 'Français'),
+    LanguageModel(code: 'ur', displayName: 'اردو'),
+    LanguageModel(code: 'hi', displayName: 'हिन्दी'),
+    LanguageModel(code: 'tr', displayName: 'Türkçe'),
+    LanguageModel(code: 'pt', displayName: 'Português'),
+    LanguageModel(code: 'ru', displayName: 'Русский'),
+    LanguageModel(code: 'zh', displayName: '中文'),
+    LanguageModel(code: 'ja', displayName: '日本語'),
+    LanguageModel(code: 'ko', displayName: '한국어'),
+    LanguageModel(code: 'it', displayName: 'Italiano'),
   ];
 
   @override

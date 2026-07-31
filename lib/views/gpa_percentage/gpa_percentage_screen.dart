@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gpa_calculator/core/constants/app_colors.dart';
 import '../../core/constants/app_dimensions.dart';
 import '../../core/utils/gpa_calculator_util.dart';
 import '../../core/utils/validators.dart';
@@ -62,6 +63,22 @@ class _GpaToPercentageScreenState extends State<GpaToPercentageScreen> {
               isNumeric: true,
               controller: _gpaController,
               errorText: _errorText,
+            ),
+            const SizedBox(height: AppDimensions.spaceLg),
+            Center(
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: const BoxDecoration(
+                  color: AppColors.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.arrow_downward,
+                  color: Colors.white,
+                  size: AppDimensions.iconMd,
+                ),
+              ),
             ),
             const SizedBox(height: AppDimensions.spaceLg),
             CustomTextField(

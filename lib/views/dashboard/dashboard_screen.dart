@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gpa_calculator/views/gpa_percentage/gpa_percentage_screen.dart';
 import 'package:gpa_calculator/views/settings/setting_screen.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_dimensions.dart';
@@ -73,6 +74,17 @@ class DashboardScreen extends StatelessWidget {
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(
                     builder: (_) => const PercentageGpaScreen()),
+              ),
+            ),
+            FeatureCard(
+              icon: Icons.swap_horiz_outlined,
+              iconColor: AppColors.percentageIconColor,
+              iconBackgroundColor: AppColors.percentageIconBg,
+              title: 'GPA to Percentage',
+              subtitle: 'Convert GPA and %',
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (_) => const GpaToPercentageScreen()),
               ),
             ),
           ],

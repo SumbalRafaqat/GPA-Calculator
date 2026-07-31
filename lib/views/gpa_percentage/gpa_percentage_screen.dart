@@ -6,41 +6,41 @@ import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/custom_button.dart';
 import '../../core/widgets/custom_text_field.dart';
 
-/// Percentage → GPA screen. User types a percentage, taps
-/// "GPA Calculate", and the GPA field (kept blank/read-only until then)
-/// fills in with the converted value.
-class PercentageGpaScreen extends StatefulWidget {
-  const PercentageGpaScreen({super.key});
+/// GPA → Percentage screen. User types a GPA, taps
+/// "Percentage Calculate", and the Percentage field (kept blank/read-only
+/// until then) fills in with the converted value.
+class GpaToPercentageScreen extends StatefulWidget {
+  const GpaToPercentageScreen({super.key});
 
   @override
-  State<PercentageGpaScreen> createState() => _PercentageGpaScreenState();
+  State<GpaToPercentageScreen> createState() => _GpaToPercentageScreenState();
 }
 
-class _PercentageGpaScreenState extends State<PercentageGpaScreen> {
-  final TextEditingController _percentageController = TextEditingController();
+class _GpaToPercentageScreenState extends State<GpaToPercentageScreen> {
   final TextEditingController _gpaController = TextEditingController();
+  final TextEditingController _percentageController = TextEditingController();
   String? _errorText;
 
   @override
   void dispose() {
-    _percentageController.dispose();
     _gpaController.dispose();
+    _percentageController.dispose();
     super.dispose();
   }
 
   void _calculate() {
-    final error = Validators.validatePercentage(_percentageController.text);
+    final error = Validators.validateGpa(_gpaController.text);
     if (error != null) {
       setState(() => _errorText = error);
       return;
     }
 
-    final percentage = double.parse(_percentageController.text);
-    final gpa = GpaCalculatorUtil.percentageToGpa(percentage);
+    final gpa = double.parse(_gpaController.text);
+    final percentage = GpaCalculatorUtil.gpaToPercentage(gpa);
 
     setState(() {
       _errorText = null;
-      _gpaController.text = gpa.toString();
+      _percentageController.text = percentage.toString();
     });
   }
 
@@ -48,8 +48,8 @@ class _PercentageGpaScreenState extends State<PercentageGpaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(
-        title: 'Percentage to GPA',
-        subtitle: 'Convert % and GPA',
+        title: 'GPA to Percentage',
+        subtitle: 'Convert GPA and %',
       ),
       body: Padding(
         padding: const EdgeInsets.all(AppDimensions.screenPadding),
@@ -57,23 +57,23 @@ class _PercentageGpaScreenState extends State<PercentageGpaScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomTextField(
-              label: 'Percentage',
-              hintText: '85.50',
+              label: 'GPA',
+              hintText: 'e.g. 3.42',
               isNumeric: true,
-              controller: _percentageController,
+              controller: _gpaController,
               errorText: _errorText,
-              suffixText: const Text('%'),
             ),
             const SizedBox(height: AppDimensions.spaceLg),
             CustomTextField(
-              label: 'GPA',
+              label: 'Percentage',
               hintText: 'Result will appear here',
-              controller: _gpaController,
+              controller: _percentageController,
               enabled: false,
+              suffixText: const Text('%'),
             ),
             const Spacer(),
             CustomButton(
-              label: 'GPA Calculate',
+              label: 'Percentage Calculate',
               icon: Icons.calculate_outlined,
               onPressed: _calculate,
             ),

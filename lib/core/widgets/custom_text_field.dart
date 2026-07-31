@@ -11,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
   final bool isNumeric;
+  final bool enabled;
   final String? errorText;
   final Widget? suffixIcon;
   final Widget? suffixText;
@@ -23,6 +24,7 @@ class CustomTextField extends StatelessWidget {
     this.controller,
     this.onChanged,
     this.isNumeric = false,
+    this.enabled = true,
     this.errorText,
     this.suffixIcon,
     this.suffixText,
@@ -41,6 +43,7 @@ class CustomTextField extends StatelessWidget {
           controller: controller,
           initialValue: controller == null ? initialValue : null,
           onChanged: onChanged,
+          enabled: enabled,
           keyboardType: isNumeric
               ? const TextInputType.numberWithOptions(decimal: true)
               : TextInputType.text,

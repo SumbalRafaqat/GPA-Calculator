@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_dimensions.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../core/widgets/custom_app_bar.dart';
+import '../../core/widgets/custom_button.dart';
+import '../../core/services/share_service.dart';
 import '../../providers/settings_provider.dart';
 import '../../providers/locale_provider.dart';
 import '../onboarding/language_screen.dart';
 
-/// Settings screen — matches Figma: Notification toggle, Reset
-/// Templates, Clear Statistics grouped in one card; Choose Language +
-/// Share in a second card; Rate us / Feedback / Privacy Policy in a
-/// third card; app version footer at the bottom.
+/// Settings screen — Notification, Reset Templates, Clear Statistics,
+/// Choose Language, Share, Rate us, Feedback, Privacy Policy.
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -20,12 +21,73 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  final ShareService _shareService = ShareService();
+
+  // TODO: replace with your real Play Store listing and privacy policy URL
+  // once the app is published.
+  static const String _playStoreUrl =
+      'https://play.google.com/store/apps/details?id=com.example.gpa_calculator';
+  static const String _privacyPolicyUrl =
+      'https://example.com/gpa-planner/privacy-policy';
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<SettingsProvider>().loadSettings();
     });
+  }
+
+  Future<void> _openUrl(String url) async {
+    final uri = Uri.parse(url);
+    final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!launched && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not open link')),
+      );
+    }
+  }
+
+  Future<void> _shareApp() async {
+    await _shareService.shareText(
+      'Check out GPA Planner — track, calculate, and excel! $_playStoreUrl',
+    );
+  }
+
+  Future<void> _showFeedbackDialog() async {
+    final controller = TextEditingController();
+
+    await showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Feedback'),
+        content: TextField(
+          controller: controller,
+          maxLines: 4,
+          decoration: const InputDecoration(
+            hintText: 'Tell us what you think...',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Thanks for your feedback!')),
+                );
+              }
+            },
+            child: const Text('Submit'),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _confirmClearStatistics(SettingsProvider provider) async {
@@ -43,10 +105,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: const Text(
-              'Clear',
-              style: TextStyle(color: AppColors.deleteRed),
-            ),
+            child: const Text('Clear', style: TextStyle(color: AppColors.deleteRed)),
           ),
         ],
       ),
@@ -77,8 +136,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               _SettingsTile(
                 icon: Icons.notifications_none,
                 title: 'Notification',
-                subtitle:
-                'Receive notification updates when messages are deleted.',
+                subtitle: 'Receive notification updates when messages are deleted.',
                 trailing: Switch(
                   value: settingsProvider.notificationsEnabled,
                   activeColor: AppColors.primary,
@@ -124,12 +182,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 icon: Icons.share_outlined,
                 title: 'Share',
                 subtitle: 'Invite friends to use the app',
-                onTap: () {
-                  // Wired to ShareService.shareText() via ResultProvider's
-                  // ShareService dependency if a global share is needed;
-                  // kept as a no-op placeholder action here since it needs
-                  // no app state, only the OS share sheet.
-                },
+                onTap: _shareApp,
                 isLast: true,
               ),
             ],
@@ -141,29 +194,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 icon: Icons.star_border,
                 title: 'Rate us',
                 subtitle: 'Give the highest rating',
-                onTap: () {},
+                onTap: () => _openUrl(_playStoreUrl),
               ),
               _SettingsTile(
                 icon: Icons.chat_bubble_outline,
                 title: 'Feedback',
                 subtitle: 'Share your experience using our app',
-                onTap: () {},
+                onTap: _showFeedbackDialog,
               ),
               _SettingsTile(
                 icon: Icons.lock_outline,
                 title: 'Privacy Policy',
                 subtitle: 'Read our privacy guidelines',
-                onTap: () {},
+                onTap: () => _openUrl(_privacyPolicyUrl),
                 isLast: true,
               ),
             ],
           ),
           const SizedBox(height: AppDimensions.spaceXl),
           const Center(
-            child: Text(
-              'Version 1.0.0',
-              style: AppTextStyles.statLabel,
-            ),
+            child: Text('Version 1.0.0', style: AppTextStyles.statLabel),
           ),
         ],
       ),
@@ -171,18 +221,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 }
 
-/// Rounded card wrapper grouping related settings tiles, matching the
-/// Figma settings list sections.
 class _SettingsGroup extends StatelessWidget {
   final List<Widget> children;
   const _SettingsGroup({required this.children});
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Column(children: children),
-    );
-  }
+  Widget build(BuildContext context) => Card(child: Column(children: children));
 }
 
 class _SettingsTile extends StatelessWidget {
@@ -226,11 +270,7 @@ class _SettingsTile extends StatelessWidget {
                 ),
                 trailing ??
                     (onTap != null
-                        ? const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 14,
-                      color: AppColors.textSecondary,
-                    )
+                        ? const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.textSecondary)
                         : const SizedBox.shrink()),
               ],
             ),

@@ -61,6 +61,19 @@ class AppLocalizationsFa extends AppLocalizations {
   String get gpaCalculatorSubtitle => 'معدل ترم';
 
   @override
+  String coursesCountTitle(int count) {
+    return 'دروس ($count)';
+  }
+
+  @override
+  String get inputTypeManual => 'نوع ورودی: دستی';
+
+  @override
+  String courseLabel(int number) {
+    return 'درس $number';
+  }
+
+  @override
   String get courseName => 'نام (اختیاری)';
 
   @override
@@ -176,6 +189,36 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get feedback => 'بازخورد';
+
+  @override
+  String get gpaToPercentageTitle => 'معدل به درصد';
+
+  @override
+  String get gpaToPercentageSubtitle => 'تبدیل معدل و درصد';
+
+  @override
+  String get percentageCalculateButton => 'محاسبه درصد';
+
+  @override
+  String get resultPlaceholder => 'نتیجه اینجا نمایش داده می‌شود';
+
+  @override
+  String get feedbackHint => 'نظر خود را بگویید...';
+
+  @override
+  String get cancelButton => 'لغو';
+
+  @override
+  String get submitButton => 'ارسال';
+
+  @override
+  String get feedbackThanksMessage => 'از بازخورد شما متشکریم!';
+
+  @override
+  String get templatesResetMessage => 'قالب‌ها بازنشانی شد';
+
+  @override
+  String get statisticsClearedMessage => 'آمار پاک شد';
 
   @override
   String get feedbackSubtitle =>

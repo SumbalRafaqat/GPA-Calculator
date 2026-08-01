@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:gpa_calculator/core/constants/app_colors.dart';
+import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_dimensions.dart';
 import '../../core/utils/gpa_calculator_util.dart';
 import '../../core/utils/validators.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/custom_button.dart';
 import '../../core/widgets/custom_text_field.dart';
+import '../../l10n/app_localizations.dart';
 
-/// Percentage → GPA screen. User types a percentage, taps
-/// "GPA Calculate", and the GPA field (kept blank/read-only until then)
-/// fills in with the converted value.
 class PercentageGpaScreen extends StatefulWidget {
   const PercentageGpaScreen({super.key});
 
@@ -47,10 +45,12 @@ class _PercentageGpaScreenState extends State<PercentageGpaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'Percentage to GPA',
-        subtitle: 'Convert % and GPA',
+      appBar: CustomAppBar(
+        title: l10n.percentageToGpaTitle,
+        subtitle: l10n.percentageToGpaSubtitle,
       ),
       body: Padding(
         padding: const EdgeInsets.all(AppDimensions.screenPadding),
@@ -58,7 +58,7 @@ class _PercentageGpaScreenState extends State<PercentageGpaScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomTextField(
-              label: 'Percentage',
+              label: l10n.percentageLabel,
               hintText: '85.50',
               isNumeric: true,
               controller: _percentageController,
@@ -83,14 +83,14 @@ class _PercentageGpaScreenState extends State<PercentageGpaScreen> {
             ),
             const SizedBox(height: AppDimensions.spaceLg),
             CustomTextField(
-              label: 'GPA',
-              hintText: 'Result will appear here',
+              label: l10n.gpaLabel,
+              hintText: l10n.resultPlaceholder,
               controller: _gpaController,
               enabled: false,
             ),
             const Spacer(),
             CustomButton(
-              label: 'GPA Calculate',
+              label: l10n.gpaCalculateButton,
               icon: Icons.calculate_outlined,
               onPressed: _calculate,
             ),

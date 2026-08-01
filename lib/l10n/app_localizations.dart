@@ -10,7 +10,17 @@ import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
 import 'app_localizations_fa.dart';
+import 'app_localizations_fr.dart';
+import 'app_localizations_hi.dart';
 import 'app_localizations_id.dart';
+import 'app_localizations_it.dart';
+import 'app_localizations_ja.dart';
+import 'app_localizations_ko.dart';
+import 'app_localizations_pt.dart';
+import 'app_localizations_ru.dart';
+import 'app_localizations_tr.dart';
+import 'app_localizations_ur.dart';
+import 'app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
 
@@ -103,7 +113,17 @@ abstract class AppLocalizations {
     Locale('en'),
     Locale('es'),
     Locale('fa'),
+    Locale('fr'),
+    Locale('hi'),
     Locale('id'),
+    Locale('it'),
+    Locale('ja'),
+    Locale('ko'),
+    Locale('pt'),
+    Locale('ru'),
+    Locale('tr'),
+    Locale('ur'),
+    Locale('zh'),
   ];
 
   /// No description provided for @appTitle.
@@ -207,6 +227,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Semester GPA'**
   String get gpaCalculatorSubtitle;
+
+  /// No description provided for @coursesCountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Courses ({count})'**
+  String coursesCountTitle(int count);
+
+  /// No description provided for @inputTypeManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Input Type: manual'**
+  String get inputTypeManual;
+
+  /// No description provided for @courseLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Course {number}'**
+  String courseLabel(int number);
 
   /// No description provided for @courseName.
   ///
@@ -436,6 +474,66 @@ abstract class AppLocalizations {
   /// **'Feedback'**
   String get feedback;
 
+  /// No description provided for @gpaToPercentageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'GPA to Percentage'**
+  String get gpaToPercentageTitle;
+
+  /// No description provided for @gpaToPercentageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Convert GPA and %'**
+  String get gpaToPercentageSubtitle;
+
+  /// No description provided for @percentageCalculateButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Percentage Calculate'**
+  String get percentageCalculateButton;
+
+  /// No description provided for @resultPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Result will appear here'**
+  String get resultPlaceholder;
+
+  /// No description provided for @feedbackHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us what you think...'**
+  String get feedbackHint;
+
+  /// No description provided for @cancelButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelButton;
+
+  /// No description provided for @submitButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get submitButton;
+
+  /// No description provided for @feedbackThanksMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for your feedback!'**
+  String get feedbackThanksMessage;
+
+  /// No description provided for @templatesResetMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Templates reset'**
+  String get templatesResetMessage;
+
+  /// No description provided for @statisticsClearedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics cleared'**
+  String get statisticsClearedMessage;
+
   /// No description provided for @feedbackSubtitle.
   ///
   /// In en, this message translates to:
@@ -471,7 +569,17 @@ class _AppLocalizationsDelegate
     'en',
     'es',
     'fa',
+    'fr',
+    'hi',
     'id',
+    'it',
+    'ja',
+    'ko',
+    'pt',
+    'ru',
+    'tr',
+    'ur',
+    'zh',
   ].contains(locale.languageCode);
 
   @override
@@ -491,8 +599,28 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsEs();
     case 'fa':
       return AppLocalizationsFa();
+    case 'fr':
+      return AppLocalizationsFr();
+    case 'hi':
+      return AppLocalizationsHi();
     case 'id':
       return AppLocalizationsId();
+    case 'it':
+      return AppLocalizationsIt();
+    case 'ja':
+      return AppLocalizationsJa();
+    case 'ko':
+      return AppLocalizationsKo();
+    case 'pt':
+      return AppLocalizationsPt();
+    case 'ru':
+      return AppLocalizationsRu();
+    case 'tr':
+      return AppLocalizationsTr();
+    case 'ur':
+      return AppLocalizationsUr();
+    case 'zh':
+      return AppLocalizationsZh();
   }
 
   throw FlutterError(

@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_dimensions.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../models/language_model.dart';
 import '../../providers/locale_provider.dart';
 import '../../providers/onboarding_provider.dart';
+import '../../l10n/app_localizations.dart';
 import '../dashboard/dashboard_screen.dart';
-import 'package:provider/provider.dart';
 
-/// Language selection screen. Matches Figma: radio-style list of
-/// English / العربية / فارسی / Deutsch / Espanol / Indonesi, with a
-/// confirm (✓) button top-right. Selecting a language is fully
-/// functional — it persists via LocaleProvider and, on confirm,
-/// completes onboarding and navigates to the Dashboard.
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
 
@@ -45,13 +41,15 @@ class _LanguageScreenState extends State<LanguageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, size: 18),
           onPressed: () => Navigator.of(context).maybePop(),
         ),
-        title: const Text('Languages', style: AppTextStyles.screenTitle),
+        title: Text(l10n.languagesTitle, style: AppTextStyles.screenTitle),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: AppDimensions.spaceLg),
@@ -70,8 +68,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: AppDimensions.spaceSm),
-            const Text(
-              'Select a language. Change it anytime in settings.',
+            Text(
+              l10n.selectLanguageSubtitle,
               style: AppTextStyles.screenSubtitle,
             ),
             const SizedBox(height: AppDimensions.spaceLg),

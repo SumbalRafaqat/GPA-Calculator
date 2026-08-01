@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../core/widgets/custom_button.dart';
+import '../../l10n/app_localizations.dart';
 import 'language_screen.dart';
 
-/// First-time permission/intro screen. Matches Figma: purple-blue
-/// gradient background, graduation-cap logo, "GPA Planner" title,
-/// "TRACK. CALCULATE. EXCEL." tagline, and a bottom step indicator
-/// (this is step 2 of a 3-step onboarding flow: Splash → Permission →
-/// Language). Tapping Continue moves to the Language screen.
 class PermissionScreen extends StatelessWidget {
   const PermissionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -48,22 +46,22 @@ class PermissionScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-                const Text(
-                  'GPA Planner',
+                Text(
+                  l10n.appTitle,
                   style: AppTextStyles.onboardingTitle,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'TRACK. CALCULATE. EXCEL.',
+                Text(
+                  l10n.onboardingTagline,
                   style: AppTextStyles.onboardingTagline,
                   textAlign: TextAlign.center,
                 ),
                 const Spacer(flex: 4),
-                _StepIndicator(currentStep: 1, totalSteps: 3),
+                const _StepIndicator(currentStep: 1, totalSteps: 3),
                 const SizedBox(height: 24),
                 CustomButton(
-                  label: 'Continue',
+                  label: l10n.continueButton,
                   backgroundColor: Colors.white,
                   onPressed: () {
                     Navigator.of(context).push(
@@ -83,11 +81,8 @@ class PermissionScreen extends StatelessWidget {
   }
 }
 
-/// Three-segment progress bar at the bottom of onboarding screens,
-/// with the active segment highlighted (matches Figma's dash-dash-dash
-/// indicator where the current step is wider/brighter).
 class _StepIndicator extends StatelessWidget {
-  final int currentStep; // 0-based index of active segment
+  final int currentStep;
   final int totalSteps;
 
   const _StepIndicator({

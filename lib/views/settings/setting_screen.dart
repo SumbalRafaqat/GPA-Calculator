@@ -5,10 +5,10 @@ import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_dimensions.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../core/widgets/custom_app_bar.dart';
-import '../../core/widgets/custom_button.dart';
 import '../../core/services/share_service.dart';
 import '../../providers/settings_provider.dart';
 import '../../providers/locale_provider.dart';
+import '../../l10n/app_localizations.dart';
 import '../onboarding/language_screen.dart';
 
 /// Settings screen — Notification, Reset Templates, Clear Statistics,
@@ -54,58 +54,62 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Future<void> _showFeedbackDialog() async {
+  Future<void> _showFeedbackDialog(AppLocalizations l10n) async {
     final controller = TextEditingController();
 
     await showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Feedback'),
+        title: Text(l10n.feedback),
         content: TextField(
           controller: controller,
           maxLines: 4,
-          decoration: const InputDecoration(
-            hintText: 'Tell us what you think...',
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            hintText: l10n.feedbackHint,
+            border: const OutlineInputBorder(),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancelButton),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(dialogContext).pop();
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Thanks for your feedback!')),
+                  SnackBar(content: Text(l10n.feedbackThanksMessage)),
                 );
               }
             },
-            child: const Text('Submit'),
+            child: Text(l10n.submitButton),
           ),
         ],
       ),
     );
   }
 
-  Future<void> _confirmClearStatistics(SettingsProvider provider) async {
+  Future<void> _confirmClearStatistics(
+      SettingsProvider provider,
+      AppLocalizations l10n,
+      ) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Clear Statistics'),
-        content: const Text(
-          'This will permanently reset all saved calculations and statistics. This action cannot be undone.',
-        ),
+        title: Text(l10n.clearStatistics),
+        content: Text(l10n.clearStatisticsSubtitle),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancelButton),
           ),
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: const Text('Clear', style: TextStyle(color: AppColors.deleteRed)),
+            child: Text(
+              l10n.clearStatistics,
+              style: const TextStyle(color: AppColors.deleteRed),
+            ),
           ),
         ],
       ),
@@ -115,7 +119,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       await provider.clearStatistics();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Statistics cleared')),
+          SnackBar(content: Text(l10n.statisticsClearedMessage)),
         );
       }
     }
@@ -125,9 +129,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final settingsProvider = context.watch<SettingsProvider>();
     final localeProvider = context.watch<LocaleProvider>();
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Settings'),
+      appBar: CustomAppBar(title: l10n.settingsTitle),
       body: ListView(
         padding: const EdgeInsets.all(AppDimensions.screenPadding),
         children: [
@@ -135,8 +140,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
               _SettingsTile(
                 icon: Icons.notifications_none,
-                title: 'Notification',
-                subtitle: 'Receive notification updates when messages are deleted.',
+                title: l10n.notification,
+                subtitle: l10n.notificationSubtitle,
                 trailing: Switch(
                   value: settingsProvider.notificationsEnabled,
                   activeColor: AppColors.primary,
@@ -145,22 +150,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               _SettingsTile(
                 icon: Icons.refresh,
-                title: 'Reset Templates',
-                subtitle: 'Restore default course templates',
+                title: l10n.resetTemplates,
+                subtitle: l10n.resetTemplatesSubtitle,
                 onTap: () async {
                   await settingsProvider.resetTemplates();
                   if (mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Templates reset')),
+                      SnackBar(content: Text(l10n.templatesResetMessage)),
                     );
                   }
                 },
               ),
               _SettingsTile(
                 icon: Icons.bar_chart_outlined,
-                title: 'Clear Statistics',
-                subtitle: 'Reset all saved calculations and statistics',
-                onTap: () => _confirmClearStatistics(settingsProvider),
+                title: l10n.clearStatistics,
+                subtitle: l10n.clearStatisticsSubtitle,
+                onTap: () => _confirmClearStatistics(settingsProvider, l10n),
                 isLast: true,
               ),
             ],
@@ -170,7 +175,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
               _SettingsTile(
                 icon: Icons.language_outlined,
-                title: 'Choose Language',
+                title: l10n.chooseLanguage,
                 subtitle: localeProvider.currentLanguage.displayName,
                 onTap: () {
                   Navigator.of(context).push(
@@ -180,8 +185,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               _SettingsTile(
                 icon: Icons.share_outlined,
-                title: 'Share',
-                subtitle: 'Invite friends to use the app',
+                title: l10n.shareApp,
+                subtitle: l10n.shareAppSubtitle,
                 onTap: _shareApp,
                 isLast: true,
               ),
@@ -192,20 +197,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
               _SettingsTile(
                 icon: Icons.star_border,
-                title: 'Rate us',
-                subtitle: 'Give the highest rating',
+                title: l10n.rateUs,
+                subtitle: l10n.rateUsSubtitle,
                 onTap: () => _openUrl(_playStoreUrl),
               ),
               _SettingsTile(
                 icon: Icons.chat_bubble_outline,
-                title: 'Feedback',
-                subtitle: 'Share your experience using our app',
-                onTap: _showFeedbackDialog,
+                title: l10n.feedback,
+                subtitle: l10n.feedbackSubtitle,
+                onTap: () => _showFeedbackDialog(l10n),
               ),
               _SettingsTile(
                 icon: Icons.lock_outline,
-                title: 'Privacy Policy',
-                subtitle: 'Read our privacy guidelines',
+                title: l10n.privacyPolicy,
+                subtitle: l10n.privacyPolicySubtitle,
                 onTap: () => _openUrl(_privacyPolicyUrl),
                 isLast: true,
               ),

@@ -6,26 +6,22 @@ import '../../core/constants/app_dimensions.dart';
 import '../../core/constants/app_text_styles.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/feature_card.dart';
+import '../../l10n/app_localizations.dart';
 import '../gpa_calculator/gpa_calculator_screen.dart';
 import '../cgpa_calculator/cgpa_calculator_screen.dart';
 import '../percentage_gpa/percentage_gpa_screen.dart';
 
-/// Home / Dashboard screen. Matches Figma: title + subtitle, blue hero
-/// card ("Let's achieve your academic goals."), "FEATURES" label, and
-/// 3 tappable feature cards routing to each calculator.
-///
-/// NOTE: this screen uses only built-in Material icons (Icons.*) — no
-/// Image.asset calls — so it has no dependency on any asset file being
-/// registered in pubspec.yaml. This avoids the "broken image / X" crash.
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Dashboard',
-        subtitle: 'Track your academic performance',
+        title: l10n.dashboardTitle,
+        subtitle: l10n.dashboardSubtitle,
         showBackButton: false,
         trailing: SettingsIconButton(
           onPressed: () {
@@ -40,16 +36,16 @@ class DashboardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const _HeroCard(),
+            _HeroCard(text: l10n.dashboardHeroText),
             const SizedBox(height: AppDimensions.spaceXl),
-            const _SectionLabel(label: 'FEATURES'),
+            _SectionLabel(label: l10n.featuresLabel),
             const SizedBox(height: AppDimensions.spaceMd),
             FeatureCard(
               icon: Icons.calculate_outlined,
               iconColor: AppColors.gpaIconColor,
               iconBackgroundColor: AppColors.gpaIconBg,
-              title: 'GPA Calculator',
-              subtitle: 'Semester GPA',
+              title: l10n.featureGpaTitle,
+              subtitle: l10n.featureGpaSubtitle,
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => const GpaCalculatorScreen()),
               ),
@@ -58,33 +54,30 @@ class DashboardScreen extends StatelessWidget {
               icon: Icons.school_outlined,
               iconColor: AppColors.cgpaIconColor,
               iconBackgroundColor: AppColors.cgpaIconBg,
-              title: 'CGPA Calculator',
-              subtitle: 'Cumulative GPA',
+              title: l10n.featureCgpaTitle,
+              subtitle: l10n.featureCgpaSubtitle,
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (_) => const CgpaCalculatorScreen()),
+                MaterialPageRoute(builder: (_) => const CgpaCalculatorScreen()),
               ),
             ),
             FeatureCard(
               icon: Icons.percent_outlined,
               iconColor: AppColors.percentageIconColor,
               iconBackgroundColor: AppColors.percentageIconBg,
-              title: 'Percentage to GPA',
-              subtitle: 'Convert % and GPA',
+              title: l10n.featurePercentageTitle,
+              subtitle: l10n.featurePercentageSubtitle,
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (_) => const PercentageGpaScreen()),
+                MaterialPageRoute(builder: (_) => const PercentageGpaScreen()),
               ),
             ),
             FeatureCard(
               icon: Icons.swap_horiz_outlined,
               iconColor: AppColors.percentageIconColor,
               iconBackgroundColor: AppColors.percentageIconBg,
-              title: 'GPA to Percentage',
-              subtitle: 'Convert GPA and %',
+              title: l10n.gpaToPercentageTitle,
+              subtitle: l10n.gpaToPercentageSubtitle,
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (_) => const GpaToPercentageScreen()),
+                MaterialPageRoute(builder: (_) => const GpaToPercentageScreen()),
               ),
             ),
           ],
@@ -94,10 +87,9 @@ class DashboardScreen extends StatelessWidget {
   }
 }
 
-/// Blue rounded hero card with the motivational message and a small
-/// icon tile on the right — matches the Figma Dashboard card.
 class _HeroCard extends StatelessWidget {
-  const _HeroCard();
+  final String text;
+  const _HeroCard({required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -110,11 +102,8 @@ class _HeroCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Expanded(
-            child: Text(
-              "Let's achieve your\nacademic goals.",
-              style: AppTextStyles.heroCardText,
-            ),
+          Expanded(
+            child: Text(text, style: AppTextStyles.heroCardText),
           ),
           Container(
             width: 56,

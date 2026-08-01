@@ -4,6 +4,7 @@ import '../../core/constants/app_dimensions.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/custom_button.dart';
 import '../../providers/cgpa_calculator_provider.dart';
+import '../../l10n/app_localizations.dart';
 import '../result/result_screen.dart';
 import 'widgets/semester_input_card.dart';
 
@@ -29,11 +30,12 @@ class _CgpaCalculatorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<CgpaCalculatorProvider>();
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'CGPA Calculator',
-        subtitle: 'Cumulative GPA',
+        title: l10n.cgpaCalculatorTitle,
+        subtitle: l10n.cgpaCalculatorSubtitle,
         trailing: IconButton(
           icon: const Icon(Icons.add_circle_outline),
           tooltip: 'Add semester',
@@ -64,7 +66,7 @@ class _CgpaCalculatorView extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(AppDimensions.screenPadding),
           child: CustomButton(
-            label: 'GPA Calculate',
+            label: l10n.gpaCalculateButton,
             icon: Icons.calculate_outlined,
             onPressed: () async {
               final cgpa = await provider.calculate();
@@ -72,8 +74,8 @@ class _CgpaCalculatorView extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => ResultScreen(
-                      screenTitle: 'CGPA Result',
-                      screenSubtitle: 'Cumulative GPA',
+                      screenTitle: l10n.semesterResultTitle,
+                      screenSubtitle: l10n.cgpaCalculatorSubtitle,
                       result: null,
                       simpleGpaOverride: cgpa,
                     ),

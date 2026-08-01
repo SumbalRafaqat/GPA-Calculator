@@ -4,6 +4,7 @@ import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../core/widgets/custom_text_field.dart';
 import '../../../models/semester_model.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// One "Semester N" card on the CGPA Calculator screen — matches
 /// Figma: "Semester 1" label (primary color), single GPA input field,
@@ -22,6 +23,8 @@ class SemesterInputCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Card(
       margin: const EdgeInsets.only(bottom: AppDimensions.spaceLg),
       child: Padding(
@@ -33,7 +36,7 @@ class SemesterInputCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Semester ${semester.semesterNumber}',
+                  l10n.semesterLabel(semester.semesterNumber),
                   style: AppTextStyles.cardTitle.copyWith(
                     color: AppColors.primary,
                   ),
@@ -54,7 +57,7 @@ class SemesterInputCard extends StatelessWidget {
             ),
             const SizedBox(height: AppDimensions.spaceMd),
             CustomTextField(
-              label: 'GPA',
+              label: l10n.gpaLabel,
               hintText: 'e.g. 2.25',
               isNumeric: true,
               initialValue: semester.gpa?.toString() ?? '',

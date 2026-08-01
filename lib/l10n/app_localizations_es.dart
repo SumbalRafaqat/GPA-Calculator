@@ -61,6 +61,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get gpaCalculatorSubtitle => 'GPA del semestre';
 
   @override
+  String coursesCountTitle(int count) {
+    return 'Cursos ($count)';
+  }
+
+  @override
+  String get inputTypeManual => 'Tipo de entrada: manual';
+
+  @override
+  String courseLabel(int number) {
+    return 'Curso $number';
+  }
+
+  @override
   String get courseName => 'Nombre (Opcional)';
 
   @override
@@ -178,6 +191,36 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get feedback => 'Comentarios';
+
+  @override
+  String get gpaToPercentageTitle => 'GPA a Porcentaje';
+
+  @override
+  String get gpaToPercentageSubtitle => 'Convertir GPA y %';
+
+  @override
+  String get percentageCalculateButton => 'Calcular Porcentaje';
+
+  @override
+  String get resultPlaceholder => 'El resultado aparecerá aquí';
+
+  @override
+  String get feedbackHint => 'Cuéntanos qué piensas...';
+
+  @override
+  String get cancelButton => 'Cancelar';
+
+  @override
+  String get submitButton => 'Enviar';
+
+  @override
+  String get feedbackThanksMessage => '¡Gracias por tus comentarios!';
+
+  @override
+  String get templatesResetMessage => 'Plantillas restablecidas';
+
+  @override
+  String get statisticsClearedMessage => 'Estadísticas borradas';
 
   @override
   String get feedbackSubtitle => 'Comparte tu experiencia usando nuestra app';

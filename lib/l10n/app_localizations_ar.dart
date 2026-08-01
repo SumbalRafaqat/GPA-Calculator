@@ -61,6 +61,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get gpaCalculatorSubtitle => 'معدل الفصل الدراسي';
 
   @override
+  String coursesCountTitle(int count) {
+    return 'الدورات ($count)';
+  }
+
+  @override
+  String get inputTypeManual => 'نوع الإدخال: يدوي';
+
+  @override
+  String courseLabel(int number) {
+    return 'الدورة $number';
+  }
+
+  @override
   String get courseName => 'الاسم (اختياري)';
 
   @override
@@ -176,6 +189,36 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get feedback => 'ملاحظات';
+
+  @override
+  String get gpaToPercentageTitle => 'من المعدل إلى النسبة';
+
+  @override
+  String get gpaToPercentageSubtitle => 'تحويل المعدل و %';
+
+  @override
+  String get percentageCalculateButton => 'احسب النسبة';
+
+  @override
+  String get resultPlaceholder => 'ستظهر النتيجة هنا';
+
+  @override
+  String get feedbackHint => 'أخبرنا برأيك...';
+
+  @override
+  String get cancelButton => 'إلغاء';
+
+  @override
+  String get submitButton => 'إرسال';
+
+  @override
+  String get feedbackThanksMessage => 'شكراً على ملاحظاتك!';
+
+  @override
+  String get templatesResetMessage => 'تم إعادة تعيين القوالب';
+
+  @override
+  String get statisticsClearedMessage => 'تم مسح الإحصائيات';
 
   @override
   String get feedbackSubtitle => 'شاركنا تجربتك في استخدام التطبيق';

@@ -61,6 +61,19 @@ class AppLocalizationsId extends AppLocalizations {
   String get gpaCalculatorSubtitle => 'IPK Semester';
 
   @override
+  String coursesCountTitle(int count) {
+    return 'Mata Kuliah ($count)';
+  }
+
+  @override
+  String get inputTypeManual => 'Jenis Input: manual';
+
+  @override
+  String courseLabel(int number) {
+    return 'Mata Kuliah $number';
+  }
+
+  @override
   String get courseName => 'Nama (Opsional)';
 
   @override
@@ -177,6 +190,36 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get feedback => 'Masukan';
+
+  @override
+  String get gpaToPercentageTitle => 'IPK ke Persentase';
+
+  @override
+  String get gpaToPercentageSubtitle => 'Konversi IPK dan %';
+
+  @override
+  String get percentageCalculateButton => 'Hitung Persentase';
+
+  @override
+  String get resultPlaceholder => 'Hasil akan muncul di sini';
+
+  @override
+  String get feedbackHint => 'Beri tahu kami pendapat Anda...';
+
+  @override
+  String get cancelButton => 'Batal';
+
+  @override
+  String get submitButton => 'Kirim';
+
+  @override
+  String get feedbackThanksMessage => 'Terima kasih atas masukan Anda!';
+
+  @override
+  String get templatesResetMessage => 'Template direset';
+
+  @override
+  String get statisticsClearedMessage => 'Statistik dihapus';
 
   @override
   String get feedbackSubtitle =>

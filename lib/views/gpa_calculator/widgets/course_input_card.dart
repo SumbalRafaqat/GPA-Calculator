@@ -4,6 +4,7 @@ import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../core/widgets/custom_text_field.dart';
 import '../../../models/course_model.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// One "Course N" card on the GPA Calculator screen — matches Figma:
 /// header row (title + delete icon), Name field, Obtained/Total side
@@ -30,6 +31,8 @@ class CourseInputCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Card(
       margin: const EdgeInsets.only(bottom: AppDimensions.spaceLg),
       child: Padding(
@@ -40,7 +43,7 @@ class CourseInputCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Course $index', style: AppTextStyles.cardTitle),
+                Text(l10n.courseLabel(index), style: AppTextStyles.cardTitle),
                 InkWell(
                   onTap: onDelete,
                   borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
@@ -57,7 +60,7 @@ class CourseInputCard extends StatelessWidget {
             ),
             const SizedBox(height: AppDimensions.spaceMd),
             CustomTextField(
-              label: 'Name (Optional)',
+              label: l10n.courseName,
               hintText: 'Programming Fundamentals',
               initialValue: course.name,
               onChanged: onNameChanged,
@@ -67,7 +70,7 @@ class CourseInputCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: CustomTextField(
-                    label: 'Obtained',
+                    label: l10n.obtained,
                     hintText: 'e.g. 85',
                     isNumeric: true,
                     initialValue: course.obtainedMarks == 0
@@ -79,7 +82,7 @@ class CourseInputCard extends StatelessWidget {
                 const SizedBox(width: AppDimensions.spaceMd),
                 Expanded(
                   child: CustomTextField(
-                    label: 'Total',
+                    label: l10n.total,
                     hintText: '100',
                     isNumeric: true,
                     initialValue: course.totalMarks.toString(),
@@ -90,7 +93,7 @@ class CourseInputCard extends StatelessWidget {
             ),
             const SizedBox(height: AppDimensions.spaceMd),
             CustomTextField(
-              label: 'Credit Hours',
+              label: l10n.creditHours,
               hintText: '3',
               isNumeric: true,
               initialValue: course.creditHours.toString(),

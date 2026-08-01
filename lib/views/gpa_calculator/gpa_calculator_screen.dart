@@ -4,6 +4,7 @@ import '../../core/constants/app_dimensions.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/custom_button.dart';
 import '../../providers/gpa_calculator_provider.dart';
+import '../../l10n/app_localizations.dart';
 import '../result/result_screen.dart';
 import 'widgets/course_input_card.dart';
 
@@ -28,11 +29,12 @@ class _GpaCalculatorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<GpaCalculatorProvider>();
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Courses (${provider.courses.length})',
-        subtitle: 'Input Type: manual',
+        title: l10n.coursesCountTitle(provider.courses.length),
+        subtitle: l10n.inputTypeManual,
         trailing: IconButton(
           icon: const Icon(Icons.add_circle_outline),
           tooltip: 'Add course',
@@ -74,7 +76,7 @@ class _GpaCalculatorView extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(AppDimensions.screenPadding),
           child: CustomButton(
-            label: 'GPA Calculate',
+            label: l10n.gpaCalculateButton,
             icon: Icons.calculate_outlined,
             onPressed: () async {
               final result = await provider.calculate();
@@ -82,8 +84,8 @@ class _GpaCalculatorView extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => ResultScreen(
-                      screenTitle: 'Semester Result',
-                      screenSubtitle: 'Semester GPA',
+                      screenTitle: l10n.semesterResultTitle,
+                      screenSubtitle: l10n.gpaCalculatorSubtitle,
                       result: result,
                     ),
                   ),

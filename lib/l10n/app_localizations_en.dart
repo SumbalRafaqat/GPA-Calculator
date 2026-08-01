@@ -61,6 +61,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gpaCalculatorSubtitle => 'Semester GPA';
 
   @override
+  String coursesCountTitle(int count) {
+    return 'Courses ($count)';
+  }
+
+  @override
+  String get inputTypeManual => 'Input Type: manual';
+
+  @override
+  String courseLabel(int number) {
+    return 'Course $number';
+  }
+
+  @override
   String get courseName => 'Name (Optional)';
 
   @override
@@ -177,6 +190,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get feedback => 'Feedback';
+
+  @override
+  String get gpaToPercentageTitle => 'GPA to Percentage';
+
+  @override
+  String get gpaToPercentageSubtitle => 'Convert GPA and %';
+
+  @override
+  String get percentageCalculateButton => 'Percentage Calculate';
+
+  @override
+  String get resultPlaceholder => 'Result will appear here';
+
+  @override
+  String get feedbackHint => 'Tell us what you think...';
+
+  @override
+  String get cancelButton => 'Cancel';
+
+  @override
+  String get submitButton => 'Submit';
+
+  @override
+  String get feedbackThanksMessage => 'Thanks for your feedback!';
+
+  @override
+  String get templatesResetMessage => 'Templates reset';
+
+  @override
+  String get statisticsClearedMessage => 'Statistics cleared';
 
   @override
   String get feedbackSubtitle => 'Share your experience using our app';

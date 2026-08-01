@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:gpa_calculator/core/constants/app_colors.dart';
+import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_dimensions.dart';
 import '../../core/utils/gpa_calculator_util.dart';
 import '../../core/utils/validators.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/custom_button.dart';
 import '../../core/widgets/custom_text_field.dart';
+import '../../l10n/app_localizations.dart';
 
-/// GPA → Percentage screen. User types a GPA, taps
-/// "Percentage Calculate", and the Percentage field (kept blank/read-only
-/// until then) fills in with the converted value.
 class GpaToPercentageScreen extends StatefulWidget {
   const GpaToPercentageScreen({super.key});
 
@@ -47,10 +45,12 @@ class _GpaToPercentageScreenState extends State<GpaToPercentageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'GPA to Percentage',
-        subtitle: 'Convert GPA and %',
+      appBar: CustomAppBar(
+        title: l10n.gpaToPercentageTitle,
+        subtitle: l10n.gpaToPercentageSubtitle,
       ),
       body: Padding(
         padding: const EdgeInsets.all(AppDimensions.screenPadding),
@@ -58,7 +58,7 @@ class _GpaToPercentageScreenState extends State<GpaToPercentageScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomTextField(
-              label: 'GPA',
+              label: l10n.gpaLabel,
               hintText: 'e.g. 3.42',
               isNumeric: true,
               controller: _gpaController,
@@ -82,15 +82,15 @@ class _GpaToPercentageScreenState extends State<GpaToPercentageScreen> {
             ),
             const SizedBox(height: AppDimensions.spaceLg),
             CustomTextField(
-              label: 'Percentage',
-              hintText: 'Result will appear here',
+              label: l10n.percentageLabel,
+              hintText: l10n.resultPlaceholder,
               controller: _percentageController,
               enabled: false,
               suffixText: const Text('%'),
             ),
             const Spacer(),
             CustomButton(
-              label: 'Percentage Calculate',
+              label: l10n.percentageCalculateButton,
               icon: Icons.calculate_outlined,
               onPressed: _calculate,
             ),

@@ -9,9 +9,13 @@ import '../../providers/result_provider.dart';
 import '../../l10n/app_localizations.dart';
 
 /// Result screen — matches Figma "Semester Result" / "CGPA Result":
-/// blue hero card ("Your GPA 1.76"), two stat tiles (Credit Hours,
-/// Percentage), "Academic Performance" card (Average Marks, Total),
-/// then PDF / Image / Share / Download action row.
+/// blue hero card, stat tiles, Academic Performance card, then
+/// PDF / Image / Share / Download action row. Each button behaves
+/// independently:
+/// - PDF: generates and opens the PDF in the device's PDF viewer.
+/// - Image: generates and shows the image in an in-app preview.
+/// - Share: shares the PDF via the OS share sheet.
+/// - Download: generates the image and saves it to the device.
 class ResultScreen extends StatefulWidget {
   final String screenTitle;
   final String screenSubtitle;
@@ -63,33 +67,57 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 
   Future<void> _handlePdf(ResultProvider provider) async {
-    final file = await provider.exportPdf();
+    await provider.openPdf();
     if (!mounted) return;
-    _showResultSnack(file != null ? 'PDF saved: ${file.path}' : provider.errorMessage);
+    if (provider.errorMessage != null) _showSnack(provider.errorMessage!);
   }
 
   Future<void> _handleImage(ResultProvider provider) async {
-    final file = await provider.exportImage(_repaintKey);
+    await provider.generateImagePreview(_repaintKey);
     if (!mounted) return;
-    _showResultSnack(
+    if (provider.errorMessage != null) {
+      _showSnack(provider.errorMessage!);
+      return;
+    }
+    if (provider.previewImageBytes != null) {
+      await showDialog(
+        context: context,
+        builder: (dialogContext) => Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(AppDimensions.spaceLg),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.memory(provider.previewImageBytes!),
+                const SizedBox(height: AppDimensions.spaceMd),
+                CustomButton(
+                  label: 'Close',
+                  onPressed: () => Navigator.of(dialogContext).pop(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      provider.clearImagePreview();
+    }
+  }
+
+  Future<void> _handleShare(ResultProvider provider) async {
+    await provider.shareResult();
+    if (!mounted) return;
+    if (provider.errorMessage != null) _showSnack(provider.errorMessage!);
+  }
+
+  Future<void> _handleDownload(ResultProvider provider) async {
+    final file = await provider.downloadImage(_repaintKey);
+    if (!mounted) return;
+    _showSnack(
       file != null ? 'Image saved: ${file.path}' : provider.errorMessage,
     );
   }
 
-  Future<void> _handleShare(ResultProvider provider) async {
-    final file = await provider.exportPdf();
-    if (file == null) {
-      if (mounted) _showResultSnack(provider.errorMessage);
-      return;
-    }
-    await provider.shareFile(file);
-  }
-
-  Future<void> _handleDownload(ResultProvider provider) async {
-    await _handlePdf(provider);
-  }
-
-  void _showResultSnack(String? message) {
+  void _showSnack(String? message) {
     if (message == null) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
@@ -159,20 +187,21 @@ class _ResultScreenState extends State<ResultScreen> {
                   child: CustomButton(
                     label: l10n.pdfButton,
                     icon: Icons.picture_as_pdf_outlined,
-                    isOutlined: !provider.isExporting,
-                    isLoading: provider.isExporting,
+                    isOutlined: !provider.isPdfLoading,
+                    isLoading: provider.isPdfLoading,
                     onPressed: () => _handlePdf(provider),
                   ),
                 ),
                 const SizedBox(width: AppDimensions.spaceMd),
                 Expanded(
-                  child:  CustomButton(
-                      label: l10n.imageButton,
-                      icon: Icons.image_outlined,
-                      isOutlined: !provider.isExporting,
-                      isLoading: provider.isExporting,
-                      onPressed: ()=> _handleImage(provider),
-                )),
+                  child: CustomButton(
+                    label: l10n.imageButton,
+                    icon: Icons.image_outlined,
+                    isOutlined: !provider.isImageLoading,
+                    isLoading: provider.isImageLoading,
+                    onPressed: () => _handleImage(provider),
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: AppDimensions.spaceMd),
@@ -182,18 +211,18 @@ class _ResultScreenState extends State<ResultScreen> {
                   child: CustomButton(
                     label: l10n.shareButton,
                     icon: Icons.share_outlined,
-                    isOutlined: !provider.isExporting,
-                    isLoading: provider.isExporting,
+                    isOutlined: !provider.isShareLoading,
+                    isLoading: provider.isShareLoading,
                     onPressed: () => _handleShare(provider),
                   ),
                 ),
                 const SizedBox(width: AppDimensions.spaceMd),
                 Expanded(
-                  child:  CustomButton(
+                  child: CustomButton(
                     label: l10n.downloadButton,
                     icon: Icons.download_outlined,
-                    isOutlined: !provider.isExporting,
-                    isLoading: provider.isExporting,
+                    isOutlined: !provider.isDownloadLoading,
+                    isLoading: provider.isDownloadLoading,
                     onPressed: () => _handleDownload(provider),
                   ),
                 ),

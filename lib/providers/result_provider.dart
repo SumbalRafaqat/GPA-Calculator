@@ -1,18 +1,15 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';   // ← ADD THIS (for GlobalKey)
-
+import 'package:flutter/widgets.dart';
+import 'package:open_file/open_file.dart';
 import '../core/services/export_service.dart';
 import '../core/services/image_export_service.dart';
 import '../core/services/share_service.dart';
 
-/// Generic ViewModel for any "Result" screen (Semester Result or CGPA
-/// Result). Holds the display data and drives the PDF / Image / Share /
-/// Download actions seen at the bottom of the Result screen.
-///
-/// NOTE: relies on ExportService, ImageExportService, ShareService —
-/// these live in core/services and are provided in the services batch.
+/// ViewModel driving the Result screen's PDF / Image / Share / Download
+/// actions. Each action has its own loading flag so tapping one button
+/// doesn't spin all four.
 class ResultProvider extends ChangeNotifier {
   final ExportService _exportService = ExportService();
   final ImageExportService _imageExportService = ImageExportService();
@@ -20,20 +17,25 @@ class ResultProvider extends ChangeNotifier {
 
   String _title = '';
   String _headlineValue = '';
-  Map<String, String> _stats = {}; // e.g. {'Credit Hours': '18', 'Percentage': '48.8%'}
+  Map<String, String> _stats = {};
 
-  bool _isExporting = false;
+  bool _isPdfLoading = false;
+  bool _isImageLoading = false;
+  bool _isShareLoading = false;
+  bool _isDownloadLoading = false;
   String? _errorMessage;
+  Uint8List? _previewImageBytes;
 
   String get title => _title;
   String get headlineValue => _headlineValue;
   Map<String, String> get stats => Map.unmodifiable(_stats);
-  bool get isExporting => _isExporting;
+  bool get isPdfLoading => _isPdfLoading;
+  bool get isImageLoading => _isImageLoading;
+  bool get isShareLoading => _isShareLoading;
+  bool get isDownloadLoading => _isDownloadLoading;
   String? get errorMessage => _errorMessage;
+  Uint8List? get previewImageBytes => _previewImageBytes;
 
-  /// Populates the result screen with computed data. Called right
-  /// after GpaCalculatorProvider.calculate() or
-  /// CgpaCalculatorProvider.calculate() returns.
   void setResult({
     required String title,
     required String headlineValue,
@@ -46,10 +48,10 @@ class ResultProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Generates a PDF report of the current result and returns the
-  /// saved file (also usable for Share/Download).
-  Future<File?> exportPdf() async {
-    _setExporting(true);
+  /// Generates the PDF and opens it with the device's default PDF viewer.
+  Future<void> openPdf() async {
+    _isPdfLoading = true;
+    notifyListeners();
     try {
       final file = await _exportService.generateResultPdf(
         title: _title,
@@ -57,22 +59,63 @@ class ResultProvider extends ChangeNotifier {
         headlineValue: _headlineValue,
         stats: _stats,
       );
-      return file;
+      await OpenFile.open(file.path);
     } catch (e) {
-      _errorMessage = 'Failed to generate PDF: $e';
-      notifyListeners();
-      return null;
+      _errorMessage = 'Failed to open PDF: $e';
     } finally {
-      _setExporting(false);
+      _isPdfLoading = false;
+      notifyListeners();
     }
   }
 
-  /// Captures the result card widget (via RepaintBoundary key passed
-  /// from the View) as a PNG image file.
-  Future<File?> exportImage(GlobalKey repaintBoundaryKey) async {
-    _setExporting(true);
+  /// Generates the result image and stores its bytes so the UI can
+  /// display it in an in-app preview (no download, no share here).
+  Future<void> generateImagePreview(GlobalKey repaintBoundaryKey) async {
+    _isImageLoading = true;
+    notifyListeners();
     try {
-      final Uint8List bytes =
+      final bytes =
+      await _imageExportService.captureWidgetAsPng(repaintBoundaryKey);
+      _previewImageBytes = bytes;
+    } catch (e) {
+      _errorMessage = 'Failed to generate image: $e';
+    } finally {
+      _isImageLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void clearImagePreview() {
+    _previewImageBytes = null;
+    notifyListeners();
+  }
+
+  /// Shares the PDF report via the OS share sheet.
+  Future<void> shareResult() async {
+    _isShareLoading = true;
+    notifyListeners();
+    try {
+      final file = await _exportService.generateResultPdf(
+        title: _title,
+        headlineLabel: 'Your GPA',
+        headlineValue: _headlineValue,
+        stats: _stats,
+      );
+      await _shareService.shareFile(file, text: 'My $_title: $_headlineValue');
+    } catch (e) {
+      _errorMessage = 'Failed to share: $e';
+    } finally {
+      _isShareLoading = false;
+      notifyListeners();
+    }
+  }
+
+  /// Generates the result image and saves it to the device (Download).
+  Future<File?> downloadImage(GlobalKey repaintBoundaryKey) async {
+    _isDownloadLoading = true;
+    notifyListeners();
+    try {
+      final bytes =
       await _imageExportService.captureWidgetAsPng(repaintBoundaryKey);
       final file = await _imageExportService.saveBytesAsImageFile(
         bytes,
@@ -80,22 +123,12 @@ class ResultProvider extends ChangeNotifier {
       );
       return file;
     } catch (e) {
-      _errorMessage = 'Failed to export image: $e';
-      notifyListeners();
+      _errorMessage = 'Failed to download image: $e';
       return null;
     } finally {
-      _setExporting(false);
+      _isDownloadLoading = false;
+      notifyListeners();
     }
-  }
-
-  /// Shares a previously generated file via the OS share sheet.
-  Future<void> shareFile(File file) async {
-    await _shareService.shareFile(file, text: 'My $_title: $_headlineValue');
-  }
-
-  void _setExporting(bool value) {
-    _isExporting = value;
-    notifyListeners();
   }
 
   void clear() {
@@ -103,6 +136,7 @@ class ResultProvider extends ChangeNotifier {
     _headlineValue = '';
     _stats = {};
     _errorMessage = null;
+    _previewImageBytes = null;
     notifyListeners();
   }
 }

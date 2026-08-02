@@ -110,13 +110,12 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 
   Future<void> _handleDownload(ResultProvider provider) async {
-    final file = await provider.downloadImage(_repaintKey);
+    final success = await provider.downloadImage(_repaintKey);
     if (!mounted) return;
     _showSnack(
-      file != null ? 'Image saved: ${file.path}' : provider.errorMessage,
+      success ? 'Image saved to gallery' : provider.errorMessage,
     );
   }
-
   void _showSnack(String? message) {
     if (message == null) return;
     ScaffoldMessenger.of(context).showSnackBar(

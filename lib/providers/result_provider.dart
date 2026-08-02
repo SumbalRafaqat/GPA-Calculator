@@ -111,26 +111,27 @@ class ResultProvider extends ChangeNotifier {
   }
 
   /// Generates the result image and saves it to the device (Download).
-  Future<File?> downloadImage(GlobalKey repaintBoundaryKey) async {
+  /// Generates the result image and saves it directly to the device's
+  /// Gallery (Download action) — visible immediately in Photos/Files.
+  Future<bool> downloadImage(GlobalKey repaintBoundaryKey) async {
     _isDownloadLoading = true;
     notifyListeners();
     try {
       final bytes =
       await _imageExportService.captureWidgetAsPng(repaintBoundaryKey);
-      final file = await _imageExportService.saveBytesAsImageFile(
+      await _imageExportService.saveBytesToGallery(
         bytes,
         fileName: 'gpa_result_${DateTime.now().millisecondsSinceEpoch}',
       );
-      return file;
+      return true;
     } catch (e) {
       _errorMessage = 'Failed to download image: $e';
-      return null;
+      return false;
     } finally {
       _isDownloadLoading = false;
       notifyListeners();
     }
   }
-
   void clear() {
     _title = '';
     _headlineValue = '';

@@ -1,18 +1,14 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';   // ← ADD THIS
+import 'package:flutter/widgets.dart';
+import 'package:gal/gal.dart';
 
-import 'package:path_provider/path_provider.dart';
-
-/// Captures a widget (wrapped in a RepaintBoundary) as a PNG image,
-/// matching the Result screen's "Image" export button. Requires no
-/// extra package beyond Flutter's built-in rendering + path_provider.
+/// Captures a widget (wrapped in a RepaintBoundary) as a PNG image and
+/// saves it directly to the device's Gallery/Photos, so the user can
+/// find it like any normal photo (visible in Files/Gallery apps).
 class ImageExportService {
   /// Renders the widget behind [repaintBoundaryKey] to PNG bytes.
-  /// The caller's View must wrap the result card in:
-  ///   RepaintBoundary(key: repaintBoundaryKey, child: ResultCard(...))
   Future<Uint8List> captureWidgetAsPng(
       GlobalKey repaintBoundaryKey, {
         double pixelRatio = 3.0,
@@ -38,14 +34,20 @@ class ImageExportService {
     return byteData.buffer.asUint8List();
   }
 
-  /// Saves PNG bytes to the app's documents directory and returns the File.
-  Future<File> saveBytesAsImageFile(
+  /// Saves PNG bytes to the device's Gallery (visible in Photos/Files
+  /// apps immediately). Requests gallery permission automatically.
+  Future<void> saveBytesToGallery(
       Uint8List bytes, {
         required String fileName,
       }) async {
-    final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/$fileName.png');
-    await file.writeAsBytes(bytes);
-    return file;
+    final hasAccess = await Gal.hasAccess();
+    if (!hasAccess) {
+      final granted = await Gal.requestAccess();
+      if (!granted) {
+        throw StateError('Gallery permission denied.');
+      }
+    }
+
+    await Gal.putImageBytes(bytes, name: fileName);
   }
 }

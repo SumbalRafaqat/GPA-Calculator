@@ -159,20 +159,20 @@ class _ResultScreenState extends State<ResultScreen> {
                   child: CustomButton(
                     label: l10n.pdfButton,
                     icon: Icons.picture_as_pdf_outlined,
+                    isOutlined: !provider.isExporting,
                     isLoading: provider.isExporting,
                     onPressed: () => _handlePdf(provider),
                   ),
                 ),
                 const SizedBox(width: AppDimensions.spaceMd),
                 Expanded(
-                  child: CustomButton(
-                    label: l10n.imageButton,
-                    icon: Icons.image_outlined,
-                    isOutlined: true,
-                    isLoading: provider.isExporting,
-                    onPressed: () => _handleImage(provider),
-                  ),
-                ),
+                  child:  CustomButton(
+                      label: l10n.imageButton,
+                      icon: Icons.image_outlined,
+                      isOutlined: !provider.isExporting,
+                      isLoading: provider.isExporting,
+                      onPressed: ()=> _handleImage(provider),
+                )),
               ],
             ),
             const SizedBox(height: AppDimensions.spaceMd),
@@ -182,16 +182,17 @@ class _ResultScreenState extends State<ResultScreen> {
                   child: CustomButton(
                     label: l10n.shareButton,
                     icon: Icons.share_outlined,
-                    isOutlined: true,
+                    isOutlined: !provider.isExporting,
                     isLoading: provider.isExporting,
                     onPressed: () => _handleShare(provider),
                   ),
                 ),
                 const SizedBox(width: AppDimensions.spaceMd),
                 Expanded(
-                  child: CustomButton(
+                  child:  CustomButton(
                     label: l10n.downloadButton,
                     icon: Icons.download_outlined,
+                    isOutlined: !provider.isExporting,
                     isLoading: provider.isExporting,
                     onPressed: () => _handleDownload(provider),
                   ),

@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import '../core/services/storage_service.dart';
+import '../core/services/notification_service.dart';
 import '../core/constants/app_strings.dart';
 
 /// ViewModel for the Settings screen: Notification toggle, Reset
-/// Templates, Clear Statistics. (Choose Language is handled by
-/// LocaleProvider; Share/Rate/Feedback/Privacy are external links,
-/// no state needed.)
+/// Templates, Clear Statistics.
 class SettingsProvider extends ChangeNotifier {
   final StorageService _storage = StorageService.instance;
+  final NotificationService _notificationService = NotificationService.instance;
 
   bool _notificationsEnabled = true;
   bool get notificationsEnabled => _notificationsEnabled;
@@ -22,31 +22,39 @@ class SettingsProvider extends ChangeNotifier {
       defaultValue: true,
     );
     notifyListeners();
+
+    // Re-sync the actual scheduled notification with the saved preference
+    // (in case it wasn't scheduled yet, e.g. after app reinstall).
+    if (_notificationsEnabled) {
+      _notificationService.scheduleDailyReminder();
+    }
   }
 
-  /// Toggles the notification switch and persists immediately.
+  /// Toggles the notification switch, persists it, and schedules or
+  /// cancels the real daily reminder notification accordingly.
   Future<void> toggleNotifications(bool value) async {
     _notificationsEnabled = value;
     notifyListeners();
     await _storage.setBool(AppStrings.keyNotificationsEnabled, value);
+
+    if (value) {
+      final granted = await _notificationService.requestPermission();
+      if (granted) {
+        await _notificationService.scheduleDailyReminder();
+      }
+    } else {
+      await _notificationService.cancelDailyReminder();
+    }
   }
 
-  /// "Reset Templates" — clears any saved default course/semester
-  /// templates so calculators start fresh next time they're opened.
-  /// (Course/semester lists themselves live in memory per-provider,
-  /// so this clears only persisted template data, not live state.)
   Future<void> resetTemplates() async {
     _isClearing = true;
     notifyListeners();
-    // Currently no separate "template" key is persisted beyond results,
-    // reserved here for future default-template presets.
     await Future.delayed(const Duration(milliseconds: 300));
     _isClearing = false;
     notifyListeners();
   }
 
-  /// "Clear Statistics" — wipes saved GPA/CGPA result history used for
-  /// any statistics/history screen.
   Future<void> clearStatistics() async {
     _isClearing = true;
     notifyListeners();

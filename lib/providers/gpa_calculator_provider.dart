@@ -5,9 +5,6 @@ import '../core/constants/app_strings.dart';
 import '../models/course_model.dart';
 import '../models/gpa_result_model.dart';
 
-/// ViewModel for the GPA Calculator screen (semester GPA).
-/// Owns the dynamic course list, exposes calculation, and persists the
-/// latest result for history/statistics.
 class GpaCalculatorProvider extends ChangeNotifier {
   final StorageService _storage = StorageService.instance;
 
@@ -18,8 +15,14 @@ class GpaCalculatorProvider extends ChangeNotifier {
   List<CourseModel> get courses => List.unmodifiable(_courses);
   GpaResultModel? get lastResult => _lastResult;
 
+  /// True only if at least one course has real data entered
+  /// (obtained marks, total marks, and credit hours all > 0).
+  bool get hasValidData => _courses.any(
+        (c) => c.obtainedMarks > 0 && c.totalMarks > 0 && c.creditHours > 0,
+  );
+
   GpaCalculatorProvider() {
-    addCourse(); // Screen always opens with one empty "Course 1" row.
+    addCourse();
   }
 
   void addCourse() {
@@ -29,7 +32,7 @@ class GpaCalculatorProvider extends ChangeNotifier {
 
   void removeCourse(String id) {
     _courses.removeWhere((course) => course.id == id);
-    if (_courses.isEmpty) addCourse(); // Never leave form fully empty.
+    if (_courses.isEmpty) addCourse();
     notifyListeners();
   }
 
@@ -51,8 +54,6 @@ class GpaCalculatorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Runs the GPA calculation and persists it to the saved-results
-  /// history (used for the "Clear Statistics" feature in Settings).
   Future<GpaResultModel> calculate() async {
     final result = GpaCalculatorUtil.calculateGpa(_courses);
     _lastResult = result;
@@ -67,8 +68,6 @@ class GpaCalculatorProvider extends ChangeNotifier {
     await _storage.setJsonList(AppStrings.keySavedGpaResults, existing);
   }
 
-  /// Resets the form back to a single empty row (used by
-  /// "Reset Templates" in Settings).
   void reset() {
     _courses.clear();
     _idCounter = 0;

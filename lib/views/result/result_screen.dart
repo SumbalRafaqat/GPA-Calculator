@@ -1,24 +1,17 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
-import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_dimensions.dart';
-import '../../core/constants/app_text_styles.dart';
 import '../../core/widgets/custom_app_bar.dart';
 import '../../core/widgets/custom_button.dart';
 import '../../core/widgets/result_card.dart';
 import '../../models/gpa_result_model.dart';
 import '../../providers/result_provider.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Result screen — matches Figma "Semester Result" / "CGPA Result":
 /// blue hero card ("Your GPA 1.76"), two stat tiles (Credit Hours,
 /// Percentage), "Academic Performance" card (Average Marks, Total),
 /// then PDF / Image / Share / Download action row.
-///
-/// Accepts either a full [GpaResultModel] (GPA Calculator flow) or a
-/// bare [simpleGpaOverride] double (CGPA Calculator flow, which only
-/// produces a single cumulative GPA number).
 class ResultScreen extends StatefulWidget {
   final String screenTitle;
   final String screenSubtitle;
@@ -49,16 +42,16 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   void initState() {
     super.initState();
-    // Populate ResultProvider so PDF export has the same data shown on screen.
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final l10n = AppLocalizations.of(context)!;
       final provider = context.read<ResultProvider>();
       final stats = <String, String>{
-        if (_hasFullStats) 'Credit Hours': '${widget.result!.creditHours}',
-        if (_hasFullStats) 'Percentage': '${widget.result!.percentage}%',
+        if (_hasFullStats) l10n.creditHours: '${widget.result!.creditHours}',
+        if (_hasFullStats) l10n.percentageStat: '${widget.result!.percentage}%',
         if (_hasFullStats)
-          'Average Marks': '${widget.result!.averageMarks}',
+          l10n.averageMarks: '${widget.result!.averageMarks}',
         if (_hasFullStats)
-          'Total':
+          l10n.totalStat:
           '${widget.result!.totalObtainedMarks}/${widget.result!.totalPossibleMarks}',
       };
       provider.setResult(
@@ -93,8 +86,6 @@ class _ResultScreenState extends State<ResultScreen> {
   }
 
   Future<void> _handleDownload(ResultProvider provider) async {
-    // "Download" reuses the PDF export and confirms the save location
-    // to the user via a snackbar.
     await _handlePdf(provider);
   }
 
@@ -108,6 +99,7 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<ResultProvider>();
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -122,7 +114,10 @@ class _ResultScreenState extends State<ResultScreen> {
               key: _repaintKey,
               child: Column(
                 children: [
-                  ResultCard(value: _gpaValue.toStringAsFixed(2)),
+                  ResultCard(
+                    label: l10n.yourGpa,
+                    value: _gpaValue.toStringAsFixed(2),
+                  ),
                   if (_hasFullStats) ...[
                     const SizedBox(height: AppDimensions.spaceLg),
                     Row(
@@ -131,7 +126,7 @@ class _ResultScreenState extends State<ResultScreen> {
                           child: ResultStatTile(
                             icon: Icons.school_outlined,
                             value: '${widget.result!.creditHours}',
-                            label: 'Credit Hours',
+                            label: l10n.creditHours,
                           ),
                         ),
                         const SizedBox(width: AppDimensions.spaceMd),
@@ -139,14 +134,17 @@ class _ResultScreenState extends State<ResultScreen> {
                           child: ResultStatTile(
                             icon: Icons.percent_outlined,
                             value: '${widget.result!.percentage}',
-                            label: 'Percentage',
+                            label: l10n.percentageStat,
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: AppDimensions.spaceLg),
                     AcademicPerformanceCard(
+                      title: l10n.academicPerformance,
+                      averageLabel: l10n.averageMarks,
                       averageMarks: '${widget.result!.averageMarks}',
+                      totalLabel: l10n.totalStat,
                       total:
                       '${widget.result!.totalObtainedMarks}/${widget.result!.totalPossibleMarks}',
                     ),
@@ -159,7 +157,7 @@ class _ResultScreenState extends State<ResultScreen> {
               children: [
                 Expanded(
                   child: CustomButton(
-                    label: 'PDF',
+                    label: l10n.pdfButton,
                     icon: Icons.picture_as_pdf_outlined,
                     isLoading: provider.isExporting,
                     onPressed: () => _handlePdf(provider),
@@ -168,7 +166,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 const SizedBox(width: AppDimensions.spaceMd),
                 Expanded(
                   child: CustomButton(
-                    label: 'Image',
+                    label: l10n.imageButton,
                     icon: Icons.image_outlined,
                     isOutlined: true,
                     isLoading: provider.isExporting,
@@ -182,7 +180,7 @@ class _ResultScreenState extends State<ResultScreen> {
               children: [
                 Expanded(
                   child: CustomButton(
-                    label: 'Share',
+                    label: l10n.shareButton,
                     icon: Icons.share_outlined,
                     isOutlined: true,
                     isLoading: provider.isExporting,
@@ -192,7 +190,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 const SizedBox(width: AppDimensions.spaceMd),
                 Expanded(
                   child: CustomButton(
-                    label: 'Download',
+                    label: l10n.downloadButton,
                     icon: Icons.download_outlined,
                     isLoading: provider.isExporting,
                     onPressed: () => _handleDownload(provider),

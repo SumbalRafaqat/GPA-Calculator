@@ -79,6 +79,14 @@ class _GpaCalculatorView extends StatelessWidget {
             label: l10n.gpaCalculateButton,
             icon: Icons.calculate_outlined,
             onPressed: () async {
+              if (!provider.hasValidData) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Please enter at least one course\'s marks before calculating.'),
+                  ),
+                );
+                return;
+              }
               final result = await provider.calculate();
               if (context.mounted) {
                 Navigator.of(context).push(

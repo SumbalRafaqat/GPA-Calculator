@@ -4,9 +4,6 @@ import '../core/utils/gpa_calculator_util.dart';
 import '../core/constants/app_strings.dart';
 import '../models/semester_model.dart';
 
-/// ViewModel for the CGPA Calculator screen. Manages a dynamic list of
-/// semesters (Semester 1, 2, 3...) each holding one GPA value, and
-/// computes the cumulative CGPA across all filled-in semesters.
 class CgpaCalculatorProvider extends ChangeNotifier {
   final StorageService _storage = StorageService.instance;
 
@@ -17,15 +14,15 @@ class CgpaCalculatorProvider extends ChangeNotifier {
   List<SemesterModel> get semesters => List.unmodifiable(_semesters);
   double? get lastCgpa => _lastCgpa;
 
+  /// True only if at least one semester has a GPA entered.
+  bool get hasValidData => _semesters.any((s) => s.gpa != null && s.gpa! > 0);
+
   CgpaCalculatorProvider() {
-    // Figma shows 6 semesters by default; kept dynamic per user's
-    // choice, so user can add/remove freely starting from these 6.
     for (int i = 0; i < 6; i++) {
       addSemester();
     }
   }
 
-  /// Adds a new semester row at the end (e.g. "Semester 7").
   void addSemester() {
     _idCounter++;
     _semesters.add(SemesterModel(
@@ -35,8 +32,6 @@ class CgpaCalculatorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Removes a semester by id and renumbers the remaining ones so
-  /// labels stay sequential (Semester 1, 2, 3...) with no gaps.
   void removeSemester(String id) {
     _semesters.removeWhere((s) => s.id == id);
     _renumberSemesters();
@@ -55,7 +50,6 @@ class CgpaCalculatorProvider extends ChangeNotifier {
     }
   }
 
-  /// Updates the GPA value typed into a semester's input field.
   void updateSemesterGpa(String id, double? gpa) {
     final index = _semesters.indexWhere((s) => s.id == id);
     if (index == -1) return;
@@ -63,8 +57,6 @@ class CgpaCalculatorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Calculates CGPA from all semesters with a valid (non-null, > 0)
-  /// GPA entered, ignoring empty rows.
   Future<double> calculate() async {
     final gpas = _semesters
         .where((s) => s.gpa != null && s.gpa! > 0)
@@ -85,7 +77,6 @@ class CgpaCalculatorProvider extends ChangeNotifier {
     await _storage.setJsonList(AppStrings.keySavedCgpaResults, existing);
   }
 
-  /// Resets back to 6 empty semester rows.
   void reset() {
     _semesters.clear();
     _idCounter = 0;

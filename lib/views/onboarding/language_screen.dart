@@ -45,21 +45,20 @@ class _LanguageScreenState extends State<LanguageScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-          onPressed: () => Navigator.of(context).maybePop(),
-        ),
+        automaticallyImplyLeading: false, // no back button
         title: Text(l10n.languagesTitle, style: AppTextStyles.screenTitle),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: AppDimensions.spaceLg),
             child: IconButton(
-              icon: const Icon(Icons.check_circle, color: AppColors.primary),
+              icon: const Icon(
+                Icons.check_circle,
+                color: AppColors.primary
+              ),
               onPressed: _confirmSelection,
             ),
           ),
-        ],
-      ),
+        ],      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: AppDimensions.screenPadding,

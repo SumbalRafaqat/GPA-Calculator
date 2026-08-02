@@ -57,11 +57,9 @@ class PermissionScreen extends StatelessWidget {
                   style: AppTextStyles.onboardingTagline,
                   textAlign: TextAlign.center,
                 ),
-                const Spacer(flex: 4),
-                const _StepIndicator(currentStep: 1, totalSteps: 3),
-                const SizedBox(height: 24),
+                const Spacer(flex: 5),
                 CustomButton(
-                  label: l10n.continueButton,
+                  label: 'Get Started',
                   backgroundColor: Colors.white,
                   onPressed: () {
                     Navigator.of(context).push(
@@ -77,35 +75,6 @@ class PermissionScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _StepIndicator extends StatelessWidget {
-  final int currentStep;
-  final int totalSteps;
-
-  const _StepIndicator({
-    required this.currentStep,
-    required this.totalSteps,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(totalSteps, (index) {
-        final isActive = index == currentStep;
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          width: isActive ? 32 : 16,
-          height: 4,
-          decoration: BoxDecoration(
-            color: isActive ? Colors.white : Colors.white38,
-            borderRadius: BorderRadius.circular(2),
-          ),
-        );
-      }),
     );
   }
 }

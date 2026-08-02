@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:gpa_calculator/core/services/notification_service.dart';
 import 'package:gpa_calculator/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +23,8 @@ import 'views/splash/splash_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await StorageService.instance.init();
+  await NotificationService.instance.init();
+  await NotificationService.instance.requestPermission();
   runApp(const GpaPlannerApp());
 }
 

@@ -77,12 +77,18 @@ class ResultStatTile extends StatelessWidget {
 /// "Academic Performance" section box seen on the Result screen —
 /// shows Average Marks / Total side by side inside a bordered card.
 class AcademicPerformanceCard extends StatelessWidget {
+  final String title;
+  final String averageLabel;
   final String averageMarks;
+  final String totalLabel;
   final String total;
 
   const AcademicPerformanceCard({
     super.key,
+    required this.title,
+    required this.averageLabel,
     required this.averageMarks,
+    required this.totalLabel,
     required this.total,
   });
 
@@ -94,7 +100,7 @@ class AcademicPerformanceCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Academic Performance', style: AppTextStyles.cardTitle),
+            Text(title, style: AppTextStyles.cardTitle),
             const SizedBox(height: AppDimensions.spaceMd),
             Row(
               children: [
@@ -103,7 +109,7 @@ class AcademicPerformanceCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(averageMarks, style: AppTextStyles.statValue),
-                      const Text('Average Marks', style: AppTextStyles.statLabel),
+                      Text(averageLabel, style: AppTextStyles.statLabel),
                     ],
                   ),
                 ),
@@ -112,7 +118,7 @@ class AcademicPerformanceCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(total, style: AppTextStyles.statValue),
-                      const Text('Total', style: AppTextStyles.statLabel),
+                      Text(totalLabel, style: AppTextStyles.statLabel),
                     ],
                   ),
                 ),

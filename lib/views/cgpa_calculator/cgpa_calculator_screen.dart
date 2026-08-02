@@ -69,6 +69,14 @@ class _CgpaCalculatorView extends StatelessWidget {
             label: l10n.gpaCalculateButton,
             icon: Icons.calculate_outlined,
             onPressed: () async {
+              if (!provider.hasValidData) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Please enter at least one semester\'s GPA before calculating.'),
+                  ),
+                );
+                return;
+              }
               final cgpa = await provider.calculate();
               if (context.mounted) {
                 Navigator.of(context).push(
@@ -82,8 +90,7 @@ class _CgpaCalculatorView extends StatelessWidget {
                   ),
                 );
               }
-            },
-          ),
+            },          ),
         ),
       ),
     );
